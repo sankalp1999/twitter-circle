@@ -5,121 +5,117 @@
 <title>Twitter Circle Visualization</title>
 <script src="https://d3js.org/d3.v6.min.js"></script>
 <style>
-    body {
-    position: relative;
-    margin:0;
-    padding: 0;
-    display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    align-items: center;
-    justify-content: flex-start; /* Align content to the top */
-    height: 100vh;
-    margin: 0;
-    background-color: #f9e4bc; /* Cream background */
-    }
-    
-    .node-foreign-object {
-    transition: transform 0.2s; /* Smooth transition for any transforms */
-    transform-origin: 50% 50%; /* Center the scaling transformation */
-    transform-box: fill-box; /* Refer to the object's bounding box for the origin */
-    border-radius: 50%; /* Keeps the circular shape */
-    overflow: hidden; /* Ensures the content does not spill out on scale */
-    }
+  body {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center;
+  justify-content: start; /* Align content to the top */
+  height: 100vh;
+  margin: 0;
+  background-color: #f9e4bc; /* Cream background */
+}
+  
+  .node-foreign-object {
+  transition: transform 0.2s; /* Smooth transition for any transforms */
+  transform-origin: 50% 50%; /* Center the scaling transformation */
+  transform-box: fill-box; /* Refer to the object's bounding box for the origin */
+  border-radius: 50%; /* Keeps the circular shape */
+  overflow: hidden; /* Ensures the content does not spill out on scale */
+}
 
-    .node-foreign-object:hover {
-    transform: scale(1.4); /* Enlarges the foreignObject on hover */
-    cursor: pointer;
-    }
+.node-foreign-object:hover {
+  transform: scale(1.4); /* Enlarges the foreignObject on hover */
+  cursor: pointer;
+}
 
-    .node-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Cover the area without stretching */
-    border-radius: 50%; /* Ensures the image is circular */
-    }
+.node-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cover the area without stretching */
+  border-radius: 50%; /* Ensures the image is circular */
+}
 
-    label {
-        margin-bottom: 20px; /* Space between the label and the slider */
-        font-size: 25px; /* Larger font size for readability */
-    }
+label {
+    display: block; /* Ensure the label is on its own line */
+    margin-bottom: 10px; /* Space between the label and the slider */
+    font-size: 30px; /* Larger font size for readability */
+}
 
-    #slider-container {
-    margin-top: 10px;
-    text-align: center; /* Center-align the slider text and slider */
-    }
+#slider-container {
+  margin-top: 20px;
+  text-align: center; /* Center-align the slider text and slider */
+  padding: 10px;
+  border-radius: 8px; /* Rounded corners for the container */
+}
 
-    svg {
-        width: 100vw;
-        height:100vh;
-    }
-
-    svg#network {
-    max-width: 95vw; /* Limit SVG size for very large screens */
-    max-height: 95vh; /* Adjust height automatically */
-    margin-top: 10px; /* Add space between the slider and the SVG */
-
-    }
- 
+svg#network {
+  max-width: 95%; /* Limit SVG size for very large screens */
+  height: 95%; /* Adjust height automatically */
+  margin-top: 20px; /* Add space between the slider and the SVG */
+}
 
 
-    #pfpCountSlider {
-        width: 250px; /* Larger width for the slider */
-        -webkit-appearance: none; /* Override default appearance for WebKit browsers */
-        appearance: none;
-        height: 20px; /* Increase the height for a bigger touch area */
-        background: #ffc0cb; /* Background color of the slider */
-        outline: none; /* Remove the outline to avoid a boxy look when selected */
-        opacity: 0.7; /* Slightly transparent */
-        transition: opacity 0.2s; /* Smooth transition for hover effect */
-    }
-    #pfpCountSlider::-webkit-slider-thumb,
-    #pfpCountSlider::-moz-range-thumb {
+
+#pfpCountSlider {
+    width: 250px; /* Larger width for the slider */
+    -webkit-appearance: none; /* Override default appearance for WebKit browsers */
+    appearance: none;
+    height: 20px; /* Increase the height for a bigger touch area */
+    background: #ffc0cb; /* Background color of the slider */
+    outline: none; /* Remove the outline to avoid a boxy look when selected */
+    opacity: 0.7; /* Slightly transparent */
+    transition: opacity 0.2s; /* Smooth transition for hover effect */
+}
+#pfpCountSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px; /* Wider thumb for easier grabbing */
+    height: 25px; /* Taller thumb for easier grabbing */
+    background: hsl(196, 84%, 46%); /* Green color for the thumb */
+    cursor: pointer; /* Indicates the thumb is draggable */
+    border-radius: 50%; /* Circular thumb */
+}
+
+#pfpCountSlider::-moz-range-thumb {
     width: 25px;
     height: 25px;
-    background: hsl(196, 84%, 46%); /* Harmonize the color for consistency */
+    background: #4CAF50;
     cursor: pointer;
     border-radius: 50%;
-    }
+}
 
-    @media (max-width: 768px) { /* Adjustments for tablets and mobile phones */
-    #slider-container {
-        width: 90%; /* Make the slider container take more space */
-    }
+@media (max-width: 768px) { /* Adjustments for tablets and mobile phones */
+  #slider-container {
+    width: 90%; /* Make the slider container take more space */
+  }
 
-    #pfpCountSlider {
-        width: 100%; /* Make the slider adapt to the container width */
-    }
+  #pfpCountSlider {
+    width: 100%; /* Make the slider adapt to the container width */
+  }
 
-    svg#network {
-        max-width: 100%; /* Allow the SVG to fill the container on smaller screens */
-    }
-    }
+  svg#network {
+    max-width: 100%; /* Allow the SVG to fill the container on smaller screens */
+  }
+}
 
 
-    #cornerImage {
-    position: absolute;
-    bottom: 0;
-    left: 8vw;
-    width: auto; /* Adjust the width automatically to maintain aspect ratio */
-    height: 24%; /* Start with a relative height, adjust as needed */
-    max-width: 300px; /* Ensures the image does not exceed this width */
-    max-height: 300px; /* Ensures the image does not exceed this height */
-    }
 
 </style>
 </head>
 <body>
     
-   
-<img src="https://images.gamebanana.com/img/ico/sprays/627d932c150ba.png" alt="Description" id="cornerImage">    
+    <div id="slider-container">
+        <label for="pfpCountSlider">Number of Profiles: <span id="pfpCount">100</span></label>
+        <input type="range" id="pfpCountSlider" min="1" max="100" value="100" step="1">
+    </div>
     
-<svg id="network" width="2000" height="3000"></svg>
-<div id="slider-container">
-    <label for="pfpCountSlider"><span id="pfpCount">200</span></label>
-    <input type="range" id="pfpCountSlider" min="1" max="200" value="200" step="1">
-</div>
+    
+<svg id="network" width="2000" height="2000"></svg>
 <script>
 // Load the data from the JSON file
+
+
+
 
     let center = { x: 0, y: 0 };
 
@@ -137,7 +133,7 @@
     const maxProfiles = data.length;
     document.getElementById('pfpCountSlider').max = maxProfiles;
     document.getElementById('pfpCountSlider').value = maxProfiles;
-    document.getElementById('pfpCount').textContent = 200; // Default to all
+    document.getElementById('pfpCount').textContent = 'All'; // Default to all
 
     const svg = d3.select('#network'),
     width = +svg.attr("width"),
