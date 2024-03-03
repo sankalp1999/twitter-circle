@@ -13,9 +13,28 @@
     align-items: center;
     height: 100vh;
   }
-  svg {
-    border: 1px solid #ccc; /* Light frame around the SVG */
-  }
+  
+  .node-foreign-object {
+  transition: transform 0.2s; /* Smooth transition for any transforms */
+  transform-origin: 50% 50%; /* Center the scaling transformation */
+  transform-box: fill-box; /* Refer to the object's bounding box for the origin */
+  border-radius: 50%; /* Keeps the circular shape */
+  overflow: hidden; /* Ensures the content does not spill out on scale */
+}
+
+.node-foreign-object:hover {
+  transform: scale(1.4); /* Enlarges the foreignObject on hover */
+  cursor: pointer;
+}
+
+.node-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cover the area without stretching */
+  border-radius: 50%; /* Ensures the image is circular */
+}
+
+
 </style>
 </head>
 <body>
@@ -93,6 +112,7 @@
     nodePositions.forEach(function(d) {
 
         const foreignObject = svg.append('foreignObject')
+        .attr('class', 'node-foreign-object')
         .attr('x', d.x - nodeRadius)
         .attr('y', d.y - nodeRadius)
         .attr('width', nodeRadius * 2)
@@ -106,6 +126,7 @@
         .style('overflow', 'hidden');     
         
         div.append('xhtml:img')
+        .attr('class', 'node-img')
         .attr('src', d.imageSrc)
         .style('width', '100%')
         .style('height', '100%')
