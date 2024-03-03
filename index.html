@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Twitter Circle Visualization</title>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<style>
+  body {
+    margin: 0;
+    background-color: lightpink; /* Light pink background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  svg {
+    border: 1px solid #ccc; /* Light frame around the SVG */
+  }
+</style>
+</head>
+<body>
+<svg id="network" width="2000" height="2000"></svg>
+<script>
+// Load the data from the JSON file
+
+
+    d3.json('pfp_dict.json').then(function(data) {
+        const svg = d3.select('#network'),
+    width = +svg.attr("width"),
+    height = +svg.attr("height"),
+    nodeRadius = 40, // Radius for the profile images
+    spacingBetweenNodes = 0, // Spacing between nodes
+    spacingBetweenCircles = 35; // Spacing between concentric circles
+
+
+
+    const center = { x: width / 2, y: height / 2 };
+
+
+
+    // Function to calculate positions
+    function calculatePositions(data, startRadius) {
+    let currentRadius = startRadius, // Adjust initial radius to start from outside the center node
+        currentAngle = 0,
+        positions = [],
+        nodesInThisCircle,
+        circumference;
+
+    // Place the center node
+    if (data.length > 0 && data[0].imageSrc !== null) {
+        positions.push({ twitterUsername: data[0].twitterUsername, imageSrc: data[0].imageSrc, x: center.x, y: center.y });
+    }
+
+    // Start from the second item if the first one is used for the center node
+    data.slice(1).forEach((d, i) => {
+        if (d.imageSrc === null) {
+            return; // Skip this iteration if imageSrc is null
+        }
+
+        circumference = 2 * Math.PI * (currentRadius);
+        nodesInThisCircle = Math.floor(circumference / (nodeRadius * 2 + spacingBetweenNodes));
+
+        if (currentAngle >= 2 * Math.PI) {
+            currentRadius += (nodeRadius * 2) + spacingBetweenCircles; // Adjust for next circle
+            currentAngle = 0; // Reset angle for next circle
+        }
+
+        const x = center.x + Math.cos(currentAngle) * currentRadius;
+        const y = center.y + Math.sin(currentAngle) * currentRadius;
+        positions.push({ twitterUsername: d.twitterUsername, imageSrc: d.imageSrc, x, y });
+
+        // Update for next node
+        currentAngle += (2 * Math.PI) / nodesInThisCircle;
+    });
+
+    return positions;
+}
+
+
+    // Call calculatePositions with your data and desired starting radius for the first circle
+    const nodePositions = calculatePositions(data, nodeRadius * 2 + spacingBetweenCircles);
+
+    const simulation = d3.forceSimulation(nodePositions)
+        .force("center", d3.forceCenter(center.x, center.y))
+        .force("collide", d3.forceCollide().radius(d => nodeRadius * 1.5).strength(0.7))
+
+
+
+    // Run the simulation for a few iterations
+    for (let i = 0; i < 10; ++i) simulation.tick(); 
+
+    // Draw the nodes
+    nodePositions.forEach(function(d) {
+
+        const foreignObject = svg.append('foreignObject')
+        .attr('x', d.x - nodeRadius)
+        .attr('y', d.y - nodeRadius)
+        .attr('width', nodeRadius * 2)
+        .attr('height', nodeRadius * 2);
+
+        // Append an HTML div to the foreignObject
+        const div = foreignObject.append('xhtml:div')
+        .style('width', `${nodeRadius * 2}px`)
+        .style('height', `${nodeRadius * 2}px`)
+        .style('border-radius', '50%') // Make the div circular
+        .style('overflow', 'hidden');     
+        
+        div.append('xhtml:img')
+        .attr('src', d.imageSrc)
+        .style('width', '100%')
+        .style('height', '100%')
+        .on('click', () => window.open(`https://twitter.com/${d.twitterUsername}`, '_blank')); 
+    });
+});
+</script>
+</body>
+</html>
