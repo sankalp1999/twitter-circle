@@ -1,6 +1,1 @@
-{
-  "dependencies": {
-    "http-server": "^14.1.1",
-    "puppeteer": "^22.3.0"
-  }
-}
+{"dependencies":{"async":"^3.2.5","got":"^14.2.0","http-server":"^14.1.1","jsdom":"^24.0.0","p-map":"^7.0.1","puppeteer":"^22.3.0"}}

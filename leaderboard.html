@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <style>
+        body {
+            font-family:Helvetica, Helvetica, Helvetica;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9e4bc;
+            color: #CF2D01;
+            
+        }
+        h1 {
+            text-align: center;
+        }
+        #leaderboard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .user {
+        background-color: f9e4bc;
+        border: 1px solid #CF2D01; /* Specifies the border width, style, and color */
+        padding: 10px;
+        margin: 10px;
+        width: 35vw; /* Adjust width here */
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+        cursor: pointer; /* Makes the mouse cursor change to a pointer on hover */
+        transition: transform 0.2s; /* Smooth transformation on click */
+        }
+
+        .user:hover {
+            transform: scale(1.02); /* Slightly enlarges the card on hover */
+        }
+        .user img {
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .username {
+            font-weight: bold;
+        }
+        .weight {
+            margin-left: auto;
+            font-size: large;
+            font-weight: bold;
+        }
+        #indexButton {
+        position: absolute;
+        top: 2vh; /* 2% of the viewport height */
+        right: 2vw; /* 5% of the viewport width */
+        padding: 0.5vw 1vw; /* Scales padding with the viewport width */
+        background-color: inherit;
+        color: #CF2D01;
+        font-family: Helvetica, Helvetica, Helvetica;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+        font-size: 1.5vw; /* Optionally make the font size responsive */
+    }
+
+    #indexButton:hover {
+        background-color: #ecb679; /* Slightly darker shade for hover effect */
+        }
+    </style>
+</head>
+<body>
+    <button id="indexButton">Circle</button>
+    <h1>Leaderboard</h1>
+    <div id="leaderboard"></div>
+    
+    <script>
+
+        document.getElementById('indexButton').addEventListener('click', function() {
+        window.location.href = 'index.html';
+        });
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('pfp_dict.json')
+                .then(response => response.json())
+                .then(data => {
+                    createLeaderboard(data);
+                })
+                .catch(error => console.error('Error loading the data:', error));
+        });
+
+        function createLeaderboard(users) {
+            const leaderboard = document.getElementById('leaderboard');
+            // Sort users by weight in descending order
+            users.sort((a, b) => b.weight - a.weight);
+            let idx = 0
+            users.forEach(user => {
+                if (idx === 0){
+                    idx += 1
+                    return
+                }
+                const userElement = document.createElement('div');
+                userElement.className = 'user';
+                userElement.innerHTML = `
+                    <img src="${user.imageSrc}" alt="${user.twitterUsername}" width="60" height="60">
+                    <div class="username">@${user.twitterUsername}</div>
+                    <div class="weight">${user.weight.toFixed(2)}</div>
+                `;
+                // Make the card clickable and redirect to the user's Twitter profile
+                userElement.onclick = function() {
+                window.open(`https://twitter.com/${user.twitterUsername}`, '_blank');
+                };
+                leaderboard.appendChild(userElement);
+                idx = idx + 1
+            });
+        }
+    </script>
+</body>
+</html>

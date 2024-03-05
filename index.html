@@ -16,6 +16,7 @@
     height: 100vh;
     margin: 0;
     background-color: #f9e4bc; /* Cream background */
+    color: #CF2D01;
     }
     
     .node-foreign-object {
@@ -63,10 +64,10 @@
 
 
     #pfpCountSlider {
-        width: 250px; /* Larger width for the slider */
+        width: 25vw; /* Larger width for the slider */
         -webkit-appearance: none; /* Override default appearance for WebKit browsers */
         appearance: none;
-        height: 20px; /* Increase the height for a bigger touch area */
+        height: 2vh; /* Increase the height for a bigger touch area */
         background: #ffc0cb; /* Background color of the slider */
         outline: none; /* Remove the outline to avoid a boxy look when selected */
         opacity: 0.7; /* Slightly transparent */
@@ -97,30 +98,54 @@
 
 
     #cornerImage {
-    position: absolute;
-    bottom: 0;
-    left: 8vw;
-    width: auto; /* Adjust the width automatically to maintain aspect ratio */
-    height: 24%; /* Start with a relative height, adjust as needed */
-    max-width: 300px; /* Ensures the image does not exceed this width */
-    max-height: 300px; /* Ensures the image does not exceed this height */
+        position: absolute;
+        bottom: 4vh;
+        left: 10vw;
+        width: auto; /* Adjust the width automatically to maintain aspect ratio */
+        height: 25vh; /* Start with a relative height, adjust as needed */
+        max-width: 35vw; /* Ensures the image does not exceed this width */
+        max-height: 35vh; /* Ensures the image does not exceed this height */
+        min-width: 100px;
+        min-height: 100px;
+    }
+
+    #leaderboardButton {
+        position: absolute;
+        top: 2vh; /* 2% of the viewport height */
+        right: 2vw; /* 5% of the viewport width */
+        padding: 0.5vw 1vw; /* Scales padding with the viewport width */
+        background-color: inherit;
+        color: #CF2D01;
+        font-family: Helvetica, Helvetica, Helvetica;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+        font-size: 1.5vw; /* Optionally make the font size responsive */
+    }
+
+
+    #leaderboardButton:hover {
+        background-color: #ecb679; /* Slightly darker shade for hover effect */
     }
 
 </style>
 </head>
 <body>
     
-   
-<img src="https://images.gamebanana.com/img/ico/sprays/627d932c150ba.png" alt="Description" id="cornerImage">    
+    <button id="leaderboardButton">Leaderboard</button>
+    <img src="https://images.gamebanana.com/img/ico/sprays/627d932c150ba.png" alt="Description" id="cornerImage">    
     
-<svg id="network" width="2000" height="3000"></svg>
-<div id="slider-container">
+    <svg id="network" width="2000" height="3000"></svg>
+    <div id="slider-container">
     <label for="pfpCountSlider"><span id="pfpCount">200</span></label>
     <input type="range" id="pfpCountSlider" min="1" max="200" value="200" step="1">
 </div>
 <script>
 // Load the data from the JSON file
-
+    document.getElementById('leaderboardButton').addEventListener('click', function() {
+        window.location.href = 'leaderboard.html';
+    });
     let center = { x: 0, y: 0 };
 
     function updateCenter() {
@@ -134,10 +159,11 @@
 
     d3.json('pfp_dict.json').then(function(data) {
         updateCenter();
+    data = data.slice(0, 200)
     const maxProfiles = data.length;
     document.getElementById('pfpCountSlider').max = maxProfiles;
-    document.getElementById('pfpCountSlider').value = maxProfiles;
-    document.getElementById('pfpCount').textContent = 200; // Default to all
+    document.getElementById('pfpCountSlider').value = maxProfiles / 2;
+    document.getElementById('pfpCount').textContent = 100; // Default to all
 
     const svg = d3.select('#network'),
     width = +svg.attr("width"),
@@ -163,7 +189,7 @@
     // Start from the second item if the first one is used for the center node
     data.slice(1).forEach((d, i) => {
         if (d.imageSrc === null) {
-            return; // Skip this iteration if imageSrc is null
+            return
         }
 
         circumference = 2 * Math.PI * (currentRadius);
@@ -222,7 +248,7 @@ function drawNodes(filteredData) {
     }
 
 
-    drawNodes(data);
+    drawNodes(data.slice(0, 100));
 
     document.getElementById('pfpCountSlider').addEventListener('input', function() {
         updateCenter();
