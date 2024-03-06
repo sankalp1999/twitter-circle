@@ -174,13 +174,19 @@ const aggregateMentionsExponentialDynamic = (data) => {
 }
 
 
-const processAndSaveMentions = async (data, userHandle, aggregationFunction, fileName) => {
+const processAndSaveMentions = async (data, userHandle, userId, aggregationFunction, fileName) => {
     
 	const mentionsCount = aggregationFunction(data)
-	let sortedMentionsArray = Object.entries(mentionsCount).sort((a, b) => b[1] - a[1])
 
-	// to easily add user at the center
-	sortedMentionsArray.unshift([userHandle, 1000])
+	let sortedMentionsArray
+	
+	if (aggregationFunction === aggregateMentionsWeighted) {
+		sortedMentionsArray = Object.entries(mentionsCount).sort((a, b) => b[1].count - a[1].count)
+	} else {
+		sortedMentionsArray = Object.entries(mentionsCount).sort((a, b) => b[1] - a[1])
+	}
+	// to put in the center
+	sortedMentionsArray.unshift([userHandle, { count: 1000, id: userId }])
     
 	const sortedMentionsObject = Object.fromEntries(sortedMentionsArray)
 	await fs.writeFile(fileName, JSON.stringify(sortedMentionsObject, null, 2), 'utf8')
@@ -208,6 +214,7 @@ const processTweets = async () => {
   
 		// Extract the username from the account information
 		const user_handle = account[0].account.username
+		const user_id = account[0].account.accountId
 		console.log('Username:', user_handle)   
 
 		const filteredDataWithoutUser = filteredData.filter(item => {
@@ -218,9 +225,9 @@ const processTweets = async () => {
         
 		await fs.mkdir(path.join(__dirname, 'mentions_count_folder'), { recursive: true })
 
-		await processAndSaveMentions(filteredDataWithoutUser, user_handle, aggregateMentionsWeighted, 'mentions_count_folder/mentionsCountWeighted.json')
-		await processAndSaveMentions(filteredDataWithoutUser, user_handle, aggregateMentions, 'mentions_count_folder/mentionsCountPure.json')
-		await processAndSaveMentions(filteredDataWithoutUser, user_handle, aggregateMentionsExponentialDynamic, 'mentions_count_folder/mentionsCountExponentialDecay.json')
+		await processAndSaveMentions(filteredDataWithoutUser, user_handle, user_id, aggregateMentionsWeighted, 'mentions_count_folder/mentionsCountWeighted.json')
+		await processAndSaveMentions(filteredDataWithoutUser, user_handle, user_id, aggregateMentions, 'mentions_count_folder/mentionsCountPure.json')
+		await processAndSaveMentions(filteredDataWithoutUser, user_handle, user_id, aggregateMentionsExponentialDynamic, 'mentions_count_folder/mentionsCountExponentialDecay.json')
   
 		console.log('Data saved successfully.')
 	} catch (error) {
