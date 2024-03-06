@@ -87,7 +87,7 @@
 
 
         document.addEventListener('DOMContentLoaded', function() {
-            fetch('final_weights.json')
+            fetch('final_weights_with_pics.json')
                 .then(response => response.json())
                 .then(data => {
                     createLeaderboard(data);

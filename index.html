@@ -181,7 +181,7 @@
     }
 
 
-    d3.json('final_weights.json').then(function(data) {
+    d3.json('pfp_dict.json').then(function(data) {
         updateCenter();
     data = data.slice(0, 200)
     const maxProfiles = data.length;

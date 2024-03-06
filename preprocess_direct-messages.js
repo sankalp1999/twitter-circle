@@ -11,7 +11,6 @@ const getPokemonImageUrl = () => {
 // Read the file and remove the JavaScript assignment prefix
 const userDetails = JSON.parse(fs.readFileSync('twitter-archive/data/account.js', 'utf8').replace('window.YTD.account.part0 = ', ''))
 
-
 const [accountWrapper] = userDetails 
 const account = accountWrapper.account 
 const userName = account.username 
@@ -19,23 +18,11 @@ const accountId = account.accountId
 
 console.log(`Username: ${userName}, Account ID: ${accountId}`)
 
-const profileData = JSON.parse(fs.readFileSync('headContent_dict.json', 'utf8'))
+const userMentionsMapping = JSON.parse(fs.readFileSync('user_mentions_screen_name_mapping.json', 'utf8'))
 
-// Create dictionaries for username to identifier and identifier to username mappings
-const usernameToId = {}
-const idToUsername = {}
-
-profileData.forEach(profile => {
-
-	const username = profile.twitterUsername
-	if(profile.profileJsonLd === 'dne' || profile.profileJsonLd === null) {
-		return
-	} else {
-		const id = profile.profileJsonLd.author.identifier
-		usernameToId[username] = id
-		idToUsername[id] = username
-	}
-})
+// Extract the screenNameToId and idToScreenName mappings
+const usernameToId = userMentionsMapping.screenNameToId
+const idToUsername = userMentionsMapping.idToScreenName
 
 
 console.log(Object.keys(idToUsername).length)
@@ -43,7 +30,12 @@ console.log(Object.keys(idToUsername).length)
 // Read the direct messages file
 const dmData = JSON.parse(fs.readFileSync('twitter-archive/data/direct-messages.js', 'utf8').replace('window.YTD.direct_messages.part0 = ', ''))
 
-// Process each conversation
+const noMapping = []
+
+
+
+// dm side, only id data
+// no username
 const processedConversations = dmData.map(conversation => {
 	const [a, b] = conversation.dmConversation.conversationId.split('-')
 	const recipientId = a === accountId ? b : a
@@ -51,6 +43,10 @@ const processedConversations = dmData.map(conversation => {
 	const messages = conversation.dmConversation.messages
 	const firstMessage = messages[0].messageCreate
 	const lastMessage = messages[messages.length - 1].messageCreate
+
+	if (!idToUsername[recipientId]) {
+		noMapping.push(recipientId)
+	}
 
 	return {
 		conversationId: conversation.dmConversation.conversationId,
@@ -70,6 +66,8 @@ const processedConversations = dmData.map(conversation => {
 	}
 })
 
+
+// IMPORTANT
 const sortedConversations = processedConversations.sort((a, b) => b.numMessages - a.numMessages)
 
 console.log(sortedConversations)
@@ -104,17 +102,7 @@ const recipientAggregates = dmData.reduce((acc, conversation) => {
 	return acc
 }, {})
 
-// Fetch imageSrc for each recipientId
-Object.keys(recipientAggregates).forEach(recipientId => {
-	const username = idToUsername[recipientId]
-	const profile = profileData.find(p => p.twitterUsername === username)
-	if (profile && profile.profileJsonLd && profile.profileJsonLd.author && profile.profileJsonLd.author.image) {
-		recipientAggregates[recipientId].imageSrc = profile.profileJsonLd.author.image.contentUrl
-	} else {
-		// Use getPokemonImageUrl() if no imageSrc is found
-		recipientAggregates[recipientId].imageSrc = getPokemonImageUrl()
-	}
-})
+
 
 // Convert the aggregated object into an array, sort it, and include imageSrc and lastMessage
 const sortedRecipientAggregates = Object.entries(recipientAggregates).map(([recipientId, stats]) => ({
@@ -128,56 +116,65 @@ console.log(sortedRecipientAggregates)
 const resultsJson = JSON.stringify(sortedRecipientAggregates, null, 2)
 fs.writeFileSync('dm_stats.json', resultsJson, 'utf8')
 
-// Define your current time, decay exponent, and linear coefficient outside the loop
+// current time, decay exponent, and linear coefficient outside the loop
 const currentTime = new Date()
 const decayExponent = 0.5 // Adjust based on desired decay of older interactions
 const linearCoefficient = 0.05
 
-profileData.forEach(profile => {
-	let totalWeight = 0 // Initialize total weight for each profile
+// total weights for each recipient
+const recipientWeights = {}
 
-	// Loop through all sorted conversations to find matches
-	sortedConversations.forEach(convo => {
-		if (convo.recipientUsername === profile.twitterUsername) {
-			// Calculate the time difference from the last message
-			const lastMessageDate = new Date(convo.lastMessage.createdAt)
-			const timeDiff = Math.max((currentTime - lastMessageDate) / (1000 * 60 * 60 * 24), 0) // Time difference in days
-            
-			// Calculate the time weight using the decay factor
-			const timeWeight = 1 / (Math.pow(timeDiff + 1, decayExponent) + linearCoefficient * timeDiff)
-            
-			// Update total weight for this profile based on the message count and time weight
-			totalWeight += (convo.numMessages / 20) * timeWeight
-		}
-	})
+// we use sortedConversations for weights because latest timestamp
+sortedConversations.forEach(convo => {
+	// Calculate the time difference from the last message
+	const lastMessageDate = new Date(convo.lastMessage.createdAt)
+	const timeDiff = Math.max((currentTime - lastMessageDate) / (1000 * 60 * 60 * 24), 0) // Time difference in days
 
-	// Update the profile's weight with the total weight calculated from matching conversations
-	if (!profile.weight) {
-		profile.weight = 0 // Initialize if it doesn't exist
-	}
-	profile.weight += totalWeight
-})
+	// Calculate the time weight using the decay factor
+	const timeWeight = 1 / (Math.pow(timeDiff + 1, decayExponent) + linearCoefficient * timeDiff)
 
+	// Calculate the weight for this conversation
+	const convoWeight = (convo.numMessages / 20) * timeWeight
 
-const extractedData = profileData.map(profile => {
-	
-	let imageSrc = profile.profileJsonLd && profile.profileJsonLd.author && profile.profileJsonLd.author.image ? profile.profileJsonLd.author.image.contentUrl : null
-
-	// If imageSrc is null, use getPokemonImageUrl() to fetch an image
-	if (!imageSrc) {
-		imageSrc = getPokemonImageUrl()
-	}
-
-	return {
-		twitterUsername: profile.twitterUsername,
-		imageSrc: imageSrc, // This will now either be the original, or fetched if null
-		weight: profile.weight || 0, // Provide a default value if weight is missing
-		identifier: profile.profileJsonLd && profile.profileJsonLd.author ? profile.profileJsonLd.author.identifier : null
+	if (recipientWeights[convo.recipientId]) { 
+		recipientWeights[convo.recipientId].weight += convoWeight // change from convo.recipientUsername to convo.recipientId
+	} else {
+		recipientWeights[convo.recipientId] = { weight: convoWeight, twitterUsername: convo.recipientUsername } // change from convo.recipientUsername to convo.recipientId
 	}
 })
 
-extractedData.sort((a, b) => b.weight - a.weight)
-
+const sortedArray = Object.entries(recipientWeights).sort((a, b) => b[1].weight - a[1].weight)
+console.log(sortedArray.length)
 // Save the updated profileData back to the file
-const updatedProfileDataJson = JSON.stringify(extractedData, null, 2)
-fs.writeFileSync('final_weights.json', updatedProfileDataJson, 'utf8')
+const recipientWeightsJson = JSON.stringify(sortedArray, null, 2)
+fs.writeFileSync('sortedDmWeights.json', recipientWeightsJson, 'utf8')
+
+// Final weight computation below this region
+
+const mentionsDataRaw = fs.readFileSync('mentions_count_folder/mentionsCountWeighted.json', 'utf8')
+const mentionsData = JSON.parse(mentionsDataRaw)
+
+let idx = 0 
+Object.entries(mentionsData).forEach(([username, {count, id}]) => {
+
+	// they are null because we don't have the userid to username mapping which relies on having atleast one mention (you have to reply)
+	// edge case is if we don't have id (i.e they haven't replied on TL) and they talked a lot in DM
+	idx += 1
+	if (id === null) {
+		const new_name = 'notfound'.concat(username)
+		recipientWeights[new_name] = { weight: count, twitterUsername : username }
+	} else if (recipientWeights[id]) {
+		recipientWeights[id].weight += count 
+	} else {
+		recipientWeights[id] = { weight: count, twitterUsername : username }
+	}
+})
+
+
+const reSortedArray = Object.entries(recipientWeights).sort((a, b) => b[1].weight - a[1].weight)
+
+const reSortedJson = JSON.stringify(reSortedArray, null, 2)
+fs.writeFileSync('sortedCombinedWeights.json', reSortedJson, 'utf8')
+
+console.log(noMapping.length)
+
