@@ -15,6 +15,7 @@
         }
         h1 {
             text-align: center;
+            
         }
         #leaderboard {
             display: flex;
@@ -49,41 +50,44 @@
             font-size: large;
             font-weight: bold;
         }
-        #indexButton {
-        position: absolute;
-        top: 2vh; /* 2% of the viewport height */
-        right: 2vw; /* 5% of the viewport width */
-        padding: 0.5vw 1vw; /* Scales padding with the viewport width */
-        background-color: inherit;
-        color: #CF2D01;
-        font-family: Helvetica, Helvetica, Helvetica;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.2s ease-in-out;
-        font-size: 1.5vw; /* Optionally make the font size responsive */
-    }
-
-    #indexButton:hover {
-        background-color: #ecb679; /* Slightly darker shade for hover effect */
+        
+        #backButton {
+            position: absolute;
+            font-size: large;
+            top: 2vh;
+            right: 2vw;
+            padding: 0.5vw 1vw;
+            background-color: inherit;
+            color: #CF2D01;
+            font-family: Helvetica, Arial, sans-serif;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        #backButton:hover {
+            background-color: #ecb679;
         }
     </style>
 </head>
 <body>
-    <button id="indexButton">Circle</button>
+    
+ <button id="backButton">Back</button>
     <h1>Leaderboard</h1>
     <div id="leaderboard"></div>
     
     <script>
 
-        document.getElementById('indexButton').addEventListener('click', function() {
-        window.location.href = 'index.html';
+       
+
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.location.href = 'index.html';
         });
 
 
 
         document.addEventListener('DOMContentLoaded', function() {
-            fetch('pfp_dict.json')
+            fetch('final_weights.json')
                 .then(response => response.json())
                 .then(data => {
                     createLeaderboard(data);
@@ -106,7 +110,7 @@
                 userElement.innerHTML = `
                     <img src="${user.imageSrc}" alt="${user.twitterUsername}" width="60" height="60">
                     <div class="username">@${user.twitterUsername}</div>
-                    <div class="weight">${user.weight.toFixed(2)}</div>
+                    <div class="weight">${idx} - Score: ${user.weight.toFixed(2)}</div>
                 `;
                 // Make the card clickable and redirect to the user's Twitter profile
                 userElement.onclick = function() {
