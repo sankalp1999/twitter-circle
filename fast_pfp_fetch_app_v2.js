@@ -1,8 +1,6 @@
 const fs = require('fs')
 const puppeteer = require('puppeteer')
 
-
-
 const getPokemonImageUrl = () => {
 	const baseUrl = 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/'
 	const pokemonNumber = Math.floor(Math.random() * 1000)
