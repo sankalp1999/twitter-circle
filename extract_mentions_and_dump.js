@@ -2,6 +2,32 @@
 const fs = require('fs').promises
 const path = require('path')
 
+const processUserMentions = async (tweet_data) => {
+	let screenNameToId = {}
+	let idToScreenName = {}
+
+	tweet_data.forEach(data => {
+		if (data.tweet.entities?.user_mentions) {
+			data.tweet.entities.user_mentions.forEach(mention => {
+				const { screen_name, id_str } = mention
+				screenNameToId[screen_name] = id_str
+				idToScreenName[id_str] = screen_name
+			})
+		}
+	})
+
+	// Prepare the data to be saved
+	const dataToSave = {
+		screenNameToId,
+		idToScreenName
+	}
+
+	// Save the dictionaries to a file
+	await fs.writeFile('user_mentions_screen_name_mapping.json', JSON.stringify(dataToSave, null, 2), 'utf8')
+	console.log('User mentions screen_name mapping saved successfully.')
+}
+
+
 const extractTwitterData = (tweet_data) => tweet_data.map(data => {
 	// Assuming data.tweet is correct, otherwise, adjust accordingly
 	let { tweet } = data
@@ -52,16 +78,28 @@ const aggregateMentionsWeighted = (data) => {
 		const timeWeight = 1 / (Math.pow(timeDiff + decayConstant, decayExponent) + linearCoefficient * timeDiff)
 
 		tweet.userMentions.forEach(mention => {
-			const { screen_name } = mention
-			// Add the mention with the decay factor applied
-			mentionsCount[screen_name] = (mentionsCount[screen_name] || 0) + timeWeight
+			const { screen_name, id_str } = mention
+			if (!mentionsCount[screen_name]) {
+				mentionsCount[screen_name] = { count: 0, id: id_str }
+			} else {
+				// if id is null from a previous validUrl mention, update it with the current id_str
+				if (mentionsCount[screen_name].id === null) {
+					mentionsCount[screen_name].id = id_str
+				}
+			}
+
+			// this is same as mentionsCount[screen_name] = mentionsCount[screen_name] + 1 occurence * timeWeight
+			mentionsCount[screen_name].count = (mentionsCount[screen_name].count || 0) + timeWeight
 		})
 
 		tweet.validUrls.forEach(mention => {
 			// Assuming validUrls also contains screen_name like userMentions
 			const { screen_name } = mention
 			if (screen_name) { // Make sure screen_name is present
-				mentionsCount[screen_name] = (mentionsCount[screen_name] || 0) + timeWeight
+				if (!mentionsCount[screen_name]) {
+					mentionsCount[screen_name] = { count: 0, id: null}
+				}
+				mentionsCount[screen_name].count += (1 * timeWeight)
 			}
 		})
 	})
@@ -149,15 +187,16 @@ const processAndSaveMentions = async (data, userHandle, aggregationFunction, fil
 }
 
 
-
-  
 const processTweets = async () => {
 	try {
 		const filePath = path.join(__dirname, 'twitter-archive/data/tweets.js')
 		const data = await fs.readFile(filePath, 'utf8')
 		const jsonPart = data.substring(data.indexOf('=') + 1).trim()
 		const tweets = JSON.parse(jsonPart)
-  
+		
+
+		processUserMentions(tweets) // create the mapping that we will use later.
+
 		const extractedData = extractTwitterData(tweets)
 		const filteredData = extractedData.filter(item => item.userMentions.length > 0 || item.validUrls.length > 0)
     

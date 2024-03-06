@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DM Stats</title>
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9e4bc;
+            color: #CF2D01;
+        }
+        h1 {
+            text-align: center;
+        }
+        #dmStats {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .conversation-wrapper {
+            width: 50vw;
+            margin: 10px;
+        }
+        .conversation {
+            background-color: #f9e4bc;
+            border: 1px solid #CF2D01;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .conversation:hover {
+            transform: scale(1.02);
+        }
+        .conversation img {
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .username {
+            font-weight: bold;
+        }
+        .messageCount {
+            margin-left: auto;
+            font-size: large;
+            font-weight: bold;
+        }
+        .lastMessage {
+            font-size: 0.9em;
+            margin: 5px 0;
+            color: #CF2D01;
+            font-weight: bold;
+            padding: 2px 5px;
+            border-radius: 5px;
+            word-wrap: break-word;
+        }
+        #backButton {
+            position: absolute;
+            top: 2vh;
+            right: 2vw;
+            padding: 0.5vw 1vw;
+            font-size: large;
+            background-color: inherit;
+            color: #CF2D01;
+            font-family: Helvetica, Arial, sans-serif;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        #backButton:hover {
+            background-color: #ecb679;
+        }
+    </style>
+</head>
+<body>
+    <button id="backButton">Back</button>
+    <h1>DM Stats</h1>
+    <div id="dmStats"></div>
+    
+    <script>
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('dm_stats.json')
+                .then(response => response.json())
+                .then(data => {
+                    createDMStats(data);
+                })
+                .catch(error => console.error('Error loading the data:', error));
+        });
+
+        function createDMStats(conversations) {
+            const dmStats = document.getElementById('dmStats');
+            conversations.forEach(convo => {
+                const convoWrapper = document.createElement('div');
+                convoWrapper.className = 'conversation-wrapper';
+                
+                const convoElement = document.createElement('div');
+                convoElement.className = 'conversation';
+                convoElement.innerHTML = `
+                    <img src="${convo.imageSrc}" alt="User Image" width="60" height="60">
+                    <div>
+                        <div class="username">@${convo.recipientUsername || 'Unknown'}</div>
+                        <div class="lastMessage">Last message:${convo.lastMessage.text}</div>
+                    </div>
+                    <div class="messageCount">Messages: ${convo.totalMessages}</div>
+                `;
+                convoElement.onclick = function() {
+                    window.open(`https://twitter.com/${convo.recipientUsername}`, '_blank');
+                };
+                
+                convoWrapper.appendChild(convoElement);
+                dmStats.appendChild(convoWrapper);
+            });
+        }
+    </script>
+</body>
+</html>
