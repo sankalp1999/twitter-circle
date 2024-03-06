@@ -129,11 +129,32 @@
         background-color: #ecb679; /* Slightly darker shade for hover effect */
     }
 
+    #dmStatsButton {
+        position: absolute;
+        top: 8vh; /* 2% of the viewport height */
+        right: 2vw; /* 5% of the viewport width */
+        padding: 0.5vw 1vw; /* Scales padding with the viewport width */
+        background-color: inherit;
+        color: #CF2D01;
+        font-family: Helvetica, Helvetica, Helvetica;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+        font-size: 1.5vw; /* Optionally make the font size responsive */
+    }
+
+
+    #dmStatsButton:hover {
+        background-color: #ecb679; /* Slightly darker shade for hover effect */
+    }
+
 </style>
 </head>
 <body>
     
     <button id="leaderboardButton">Leaderboard</button>
+    <button id="dmStatsButton" class="navigation-button">DM stats</button>
     <img src="https://images.gamebanana.com/img/ico/sprays/627d932c150ba.png" alt="Description" id="cornerImage">    
     
     <svg id="network" width="2000" height="3000"></svg>
@@ -146,6 +167,9 @@
     document.getElementById('leaderboardButton').addEventListener('click', function() {
         window.location.href = 'leaderboard.html';
     });
+    document.getElementById('dmStatsButton').addEventListener('click', function() {
+        window.location.href = 'dm_stats.html';
+    });
     let center = { x: 0, y: 0 };
 
     function updateCenter() {
@@ -157,7 +181,7 @@
     }
 
 
-    d3.json('pfp_dict.json').then(function(data) {
+    d3.json('final_weights.json').then(function(data) {
         updateCenter();
     data = data.slice(0, 200)
     const maxProfiles = data.length;
