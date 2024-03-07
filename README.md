@@ -46,6 +46,7 @@
 Open to suggestions. I am not a js dev, mostly written java, ruby and python in production 
 so please bear with the code haha. Thanks to chatgpt4 this was possible to make in less time.
 
-can adjust pfp count in the file `pfp_fetch_and_id_correction.js` using the `topN`. I suggest
+can adjust pfp count in the file `pfp_fetch_and_id_correction.js` using the `topN`. I can add it as
+command arguments in bash script but choosing not to do so rn. I suggest
 not to do more than 500. We are fetching pfp cdn url from sotwe.com and not twitter dot com if you are curious.
 
