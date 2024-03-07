@@ -119,7 +119,7 @@ const results = dmStats.map(conv => {
 		imageSrc = updatedScreenNameToId[recipientUsername]?.imageSrc
 		
 	}
-	console.log(recipientUsername, imageSrc)
+	console.log(recipientId, imageSrc)
 
 	if (!recipientUsername) {
 		recipientUsername = 'not_found'.concat(recipientId)
@@ -128,7 +128,7 @@ const results = dmStats.map(conv => {
 	if (!imageSrc) {
 		imageSrc = getPokemonImageUrl()
 	}
-	
+
 	return processConversations(directMessagesData, recipientId, recipientUsername, imageSrc, lastMessage, lastMessageDate, totalMsgCount, messagesSent, messagesReceived)
 })
 

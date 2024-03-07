@@ -109,5 +109,16 @@ We get free mapping between name and id. It took me sometime to realise this. I 
 If you have replied to someone atleast once, then you have a valid mapping.
 
 
-### Known Bugs
-- You may see some @notfound_userid in the stats table
+### Bugs and Limitations
+- You may see some @notfound_userid in the DM stats table. These are accounts where we couldn't find a 
+mapping between username and id from the reply mentions data. Since there combined weights do not end up
+in the topN, their pfp and banner is not fetched so they end up as not found. 
+
+I can add some code to fetch banners (so i can get the userid) for top 200 dm stats also. It will require less than 200 ofc
+because most people you talk to in DM you have replied to them atleast once on the timeline.
+
+if you really want to find them, you can try going to twitter.com/intent/user?user_id=user_id
+or try twitter.com/i/user/user_id. you need to be logged in for this.
+
+- @notfound_userid and Recieved:0 - These are not bugs. It looks like data from
+deleted accounts ceases to exist.
