@@ -7,10 +7,10 @@
 
 ## Features
 
->Make a Twitter Circle visualization for upto 200 users
->Check leaderboard based on *all* your mentions of other users and *all* direct messages
->Check DM stats like messages sent/recieved per user, total messages, last message with them
->DM bar graph where you can see messages/month for 5 years data
+1. Make a Twitter Circle visualization for upto 200 users
+2. Check leaderboard based on *all* your mentions of other users and *all* direct messages
+3. Check DM stats like messages sent/recieved per user, total messages, last message with them
+4. DM bar graph where you can see messages/month for 5 years data
 
 ### Setup
 
