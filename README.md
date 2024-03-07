@@ -12,7 +12,7 @@
 3. Check DM stats like messages sent/recieved per user, total messages, last message with them
 4. DM bar graph where you can see messages/month for 5 years data
 
-### Setup
+## Setup
 
 1. Clone the repository:
    ```
@@ -53,12 +53,12 @@
    This command will start the Twitter Circle application.
 
 
-### Open to feedback
+## Open to feedback
 
 Let me know in the DMs or maybe PRs. I don't primarily write JS so open to suggestions
 to make the code or UI better.
 
-### Flow of execution
+## Flow of execution
 
 
 `extract_mentions_and_dump.js` - Extracts the mentions that are based on *your* replies and quote tweets. some 
