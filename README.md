@@ -51,7 +51,8 @@
 Let me know in the DMs or maybe PRs. I don't primarily write JS so open to suggestions
 to make the code or UI better.
 
-### Flow of execution is same as bash script
+### Flow of execution
+
 
 `extract_mentions_and_dump.js` - Extracts the mentions that are based on *your* replies and quote tweets. some 
 power law decay with a linear time in denominator to smoothen it are calculated. weights are stored
