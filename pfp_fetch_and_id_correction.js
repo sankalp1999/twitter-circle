@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 const fs = require('fs')
 const puppeteer = require('puppeteer')
 
@@ -9,7 +10,7 @@ const getPokemonImageUrl = () => {
 }
 
 const getAvatar = async (id, twitterUsername, browser, weight) => {
-	let attempts = 2
+	let attempts = 3
 	for (let i = 0; i < attempts; i++) {
 		const page = await browser.newPage()
 		await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36')
@@ -38,7 +39,7 @@ const getAvatar = async (id, twitterUsername, browser, weight) => {
 			}, twitterUsername)
 
 			if (imageSrc && imageSrc.startsWith('data:image')) {
-				throw new Error(`Image source for ${twitterUsername} is a data URL, not a link.`);
+				throw new Error(`Image source for ${twitterUsername} is a data URL, not a link.`)
 			}
 			console.log(`${twitterUsername}: ${imageSrc}`)
 			let bannerSrc = 'already_exists'
@@ -82,8 +83,9 @@ const filePath = 'sortedCombinedWeights.json';
 		const jsonString = fs.readFileSync(filePath, 'utf8')
 		const data = JSON.parse(jsonString)
 		
-		const entries = data.slice(0, 200) // Use directly, assuming your data structure
-		const remainingEntries = data.slice(200)
+		const topN = 250
+		const entries = data.slice(0, topN) // Use directly, assuming your data structure
+		const remainingEntries = data.slice(topN)
 
 		const chunks = chunkArray(entries, 50)
 		let results = []
@@ -104,7 +106,8 @@ const filePath = 'sortedCombinedWeights.json';
 		// PFP FETCH IS DONE
 		// BELOW THIS POINT IS TO FIX MISSING ACCOUNT IDS
 		
-		
+
+		// add remaining weight
 		const sortedDmWeightsRaw = fs.readFileSync('sortedDmWeights.json', 'utf8')
 		const sortedDmWeightsArray = JSON.parse(sortedDmWeightsRaw)
 		const sortedDmWeightsLookup = sortedDmWeightsArray.reduce((acc, [id, { weight }]) => {
@@ -112,23 +115,36 @@ const filePath = 'sortedCombinedWeights.json';
 			return acc
 		}, {})
 
-		// Step 2: Update results based on the lookup table
+		const user_mentions_dict = fs.readFileSync('user_mentions_screen_name_mapping.json', 'utf8')
+		const userMentionsDict = JSON.parse(user_mentions_dict)
+		
+
+		// update missing username and id
+		const screenNameToId = userMentionsDict.screenNameToId
+		const idToScreenName = userMentionsDict.idToScreenName
+
+		
 		results.forEach((result) => {
 			if (result.id.includes('notfound')) {
 				const regexPattern = 'profile_banners\\/([^\\/]+)'
 				const regex = new RegExp(regexPattern)
 				const match = result.bannerSrc ? result.bannerSrc.match(regex) : null
+
 				if (match) {
 					result.id = match[1] 
 
-					// Since earlier we added only mentionsCountWeighted count for this
-					// Lookup the new weight and add it to result.weight if the id is found in sortedDmWeightsLookup
+					screenNameToId[result.twitterUsername] = result.id // Map username to ID
+           			idToScreenName[result.id] = result.twitterUsername
+					console.log(result.id, result.twitterUsername)
+
+					// since earlier we added only mentionsCountWeighted count for this
+					// lookup the new weight and add it to result.weight if the id is found in sortedDmWeightsLookup
 					const additionalWeight = sortedDmWeightsLookup[result.id]
 					if (additionalWeight) {
 						result.weight += additionalWeight
 					}
 				} else {
-					console.log(`${result.twitterUsername} No ID found in bannerSrc`)
+					// console.log(`${result.twitterUsername} No ID found in bannerSrc`)
 					// Handle the case where no match is found, if necessary
 				}
 			}
@@ -139,6 +155,15 @@ const filePath = 'sortedCombinedWeights.json';
 
 		const resultsJson = JSON.stringify(results, null, 2)
 		fs.writeFileSync('final_weights_with_pics.json', resultsJson, 'utf8')
+
+		fs.writeFileSync('user_mentions_screen_name_mapping.json', JSON.stringify(userMentionsDict, null, 2), 'utf8', (err) => {
+			if (err) {
+			  console.error('An error occurred while writing the JSON to the file:', err)
+			} else {
+			  console.log('Successfully updated and saved the screen_name to id lookup with new data.')
+			}
+		  })
+
 		console.log('Successfully saved profile images data to file.')
 	} catch (err) {
 		console.error('Error:', err)
