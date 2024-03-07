@@ -96,6 +96,26 @@
         .messageCount {
             font-size: 0.9em; /* Smaller text for less emphasis */
         }
+
+
+        /* experimental */
+
+        .conversation:hover::after {
+        content: 'Click to view conversation stats';
+        position: absolute;
+        bottom: -2em;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #f2f2f2; /* Soft Light Grey */
+        color: #a65336; /* Warm Deep Orange */
+        padding: 5px;
+        border-radius: 5px;
+        font-size: 0.8em;
+        white-space: nowrap;
+        border: 1px solid #d9a993; /* Soft Orange for the border */
+    }
+
+
     </style>
 </head>
 <body>
