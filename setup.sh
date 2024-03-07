@@ -21,6 +21,3 @@ node direct-messaging-stats/dm_final_stats_processing.js
 
 echo "All scripts have been executed successfully!"
 
-# Starting the http-server
-echo "Starting the http-server on port 8080"
-node start_server.js
