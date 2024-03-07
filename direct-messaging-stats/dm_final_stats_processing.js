@@ -1,6 +1,14 @@
 const fs = require('fs')
 
 
+const getPokemonImageUrl = () => {
+	const baseUrl = 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/'
+	const pokemonNumber = Math.floor(Math.random() * 1000)
+	const paddedNumber = pokemonNumber.toString().padStart(3, '0')
+	return  `${baseUrl}${paddedNumber}.png`
+}
+
+
 // thanks chatgpt
 function generateMonthYears() {
 	let monthYears = []
@@ -100,15 +108,27 @@ const results = dmStats.map(conv => {
 	const lastMessage = conv.lastMessage.text
 	const lastMessageDate = new Date(conv.lastMessage.createdAt)
 	const twitterUsername = updatedIdToScreenName[recipientId]?.twitterUsername
-	const imageSrc = updatedIdToScreenName[recipientId]?.imageSrc
+	let imageSrc = updatedIdToScreenName[recipientId]?.imageSrc
 	const totalMsgCount = conv.totalMessages
 	const messagesSent = conv.messagesSent
 	const messagesReceived = conv.messagesReceived
 
 	let recipientUsername = conv.recipientUsername ? conv.recipientUsername : twitterUsername
+
+	if (!imageSrc && recipientUsername) {
+		imageSrc = updatedScreenNameToId[recipientUsername]?.imageSrc
+		
+	}
+	console.log(recipientUsername, imageSrc)
+
 	if (!recipientUsername) {
 		recipientUsername = 'not_found'.concat(recipientId)
 	}
+
+	if (!imageSrc) {
+		imageSrc = getPokemonImageUrl()
+	}
+	
 	return processConversations(directMessagesData, recipientId, recipientUsername, imageSrc, lastMessage, lastMessageDate, totalMsgCount, messagesSent, messagesReceived)
 })
 

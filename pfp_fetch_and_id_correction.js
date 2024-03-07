@@ -83,6 +83,7 @@ const filePath = 'sortedCombinedWeights.json';
 		const jsonString = fs.readFileSync(filePath, 'utf8')
 		const data = JSON.parse(jsonString)
 		
+		// can adjust this
 		const topN = 250
 		const entries = data.slice(0, topN) // Use directly, assuming your data structure
 		const remainingEntries = data.slice(topN)

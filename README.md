@@ -62,13 +62,15 @@ to make the code or UI better.
 
 ## Flow of execution
 
-relevant files used from the archive 
+### relevant files used from the archive 
 
 ```
 account.js - contains basic detail of your account like accountId and userhandle/screenname 
 tweets.js - contains all your tweets (normal tweet, replies, quote tweets) with data like reply mentions, quote tweet url, text, media url
 direct-messages.js - all your personal messages, no group chat messages
 ```
+
+### Scripts
 
 `extract_mentions_and_dump.js` - Extracts the mentions that are based on *your* replies and quote tweets. I sum up
 the mentions and apply a weighting mechanism based on time difference to ensure the relevance of interactions. Recent interactions
@@ -80,17 +82,31 @@ for the recency bias
 At the beginning of the file, you can see I am creating a mapping from accountId / user id to username and vice-versa
 this helps to avoid scraping. This mapping is required because the direct messaging data only has accountIds and no userhandles.
 The mapping will work if you have replied to the person atleast once otherwise their accountId won't be known 
-(and we won't be able to map from DM to here). 
+(and we won't be able to map from DM to here). There is a scraping workaround but I wanted to avoid it 
+as it takes time plus want to keep scraping at minimum. see `utils/fetch_user_id_to_user_name.js`
 
-`preprocess_direct-messages.js` - Extracts messaging data, process *all* messages except the gc ones, get basic stats, calculate DM weights based on same modified power law decay function that we applied earlier and add them to existing weights.
+`preprocess_direct-messages.js` - Extracts messaging data, process *all* messages except the group chat from the day you joined the bird app, get basic stats, calculate DM weights based on same modified power law decay function as above and add them to existing weights.
 
 `pfp_fetch_and_id_correction.js` - Get the profile pictures using puppeteer from sotwe dot com, get profile banner
-if id was not found earlier, use profile banner to get accountID and correct it for topN people. 
+if id was not found earlier, use profile banner to get accountID and use it to correct id_to_username or vice-versa mapping for topN people. 
 
 This file is educational if you want to learn about basics of concurrent scraping.
 
 `direct-messaging-stats/dm_final_stats_processing.js` - Processes conversations to enable drawing graph 
 available by clicking on fields in the DM stats file.
+
+
+
+### Username to user id without scraping
+
+
+
+![Staring at data is essential. It solves a lot of problems. ](static/image.png)
+
+![user_mentions](static/tweet_example.png)
+
+We get free mapping between name and id. It took me sometime to realise this. I had already written the scraper.
+If you have replied to someone atleast once, then you have a valid mapping.
 
 
 ### Known Bugs

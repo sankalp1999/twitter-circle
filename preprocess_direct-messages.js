@@ -74,6 +74,7 @@ const sortedConversations = processedConversations.sort((a, b) => b.numMessages 
 console.log(sortedConversations)
 
 // New aggregation logic, keeping processedConversations intact
+// saved as dm_sorted_by_message_count_and_last_message
 const recipientAggregates = dmData.reduce((acc, conversation) => {
 	const messages = conversation.dmConversation.messages
 	const [a, b] = conversation.dmConversation.conversationId.split('-')
