@@ -119,7 +119,6 @@ const results = dmStats.map(conv => {
 		imageSrc = updatedScreenNameToId[recipientUsername]?.imageSrc
 		
 	}
-	console.log(recipientId, imageSrc)
 
 	if (!recipientUsername) {
 		recipientUsername = 'not_found'.concat(recipientId)
