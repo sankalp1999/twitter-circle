@@ -12,7 +12,8 @@
    git clone https://github.com/sankalp1999/twitter-circle.git
    ```
 
-2. Copy your Twitter archive into the project folder and name it `twitter-archive`.
+2. Copy your Twitter archive into the project folder and rename the archive/zip file `twitter-archive`
+
 
 3. Install Node.js (for Linux and macOS):
    - Visit the official Node.js website: https://nodejs.org
@@ -36,6 +37,7 @@
    ./setup.sh
    ```
    This will make the `setup.sh` script executable and run it to set up the project.
+
 
 6. Start the application:
    ```
