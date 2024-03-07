@@ -67,6 +67,7 @@ const processedConversations = dmData.map(conversation => {
 })
 
 
+
 // IMPORTANT
 const sortedConversations = processedConversations.sort((a, b) => b.numMessages - a.numMessages)
 
@@ -78,6 +79,7 @@ const recipientAggregates = dmData.reduce((acc, conversation) => {
 	const [a, b] = conversation.dmConversation.conversationId.split('-')
 	const recipientId = a === accountId ? b : a
 	const recipientUsername = idToUsername[recipientId]
+
 
 	if (!acc[recipientId]) {
 		acc[recipientId] = { totalConversations: 0, totalMessages: 0, imageSrc: null, lastMessage: null, recipientUsername: recipientUsername }
@@ -112,7 +114,7 @@ const sortedRecipientAggregates = Object.entries(recipientAggregates).map(([reci
 
 console.log(sortedRecipientAggregates)
 
-// Save the sorted data to dm_stats.json
+// Save the sorted data to dm_sorted_by_message_count_and_last_message
 const resultsJson = JSON.stringify(sortedRecipientAggregates, null, 2)
 fs.writeFileSync('dm_sorted_by_message_count_and_last_message.json', resultsJson, 'utf8')
 
