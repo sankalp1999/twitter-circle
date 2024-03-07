@@ -1,5 +1,8 @@
 # Twitter Circle (README is work in progress)
 
+
+![Twitter Circle](static/twitter-circle.png)
+
 ## A tool to visualize your Twitter network and direct messaging history
 
 ### Setup
@@ -53,7 +56,7 @@ not to do more than 500. We are fetching pfp cdn url from sotwe.com and not twit
 
 ### Flow of execution is same as bash script
 
-extract_mentions_and_dump.js - Extracts the mentions that are based on *your* replies and quote tweets. some 
+`extract_mentions_and_dump.js` - Extracts the mentions that are based on *your* replies and quote tweets. some 
 power law decay with a linear time in denominator to smoothen it are calculated. weights are stored
 in mentions_count_folder
 
@@ -61,12 +64,11 @@ at the start of file, you can see I am creating a mapping from accountId / user 
 this helps to avoid scraping. this will work if you have replied to the person atleast once otherwise
 their accountId won't be known (and we won't be able to map from DM to here)
 
-preprocess_direct-messages.js - extract dm, get basic stats, calculate DM weights based on same function that we applied
-earlier and add them to existing weights.
+`preprocess_direct-messages.js` - extract dm, process *all* messages except the gc ones, get basic stats, calculate DM weights based on same function that we applied earlier and add them to existing weights.
 
-pfp_fetch_and_id_correction - get the profile pictures using puppeteer from sotwe dot com, get profile banner
+`pfp_fetch_and_id_correction.js` - get the profile pictures using puppeteer from sotwe dot com, get profile banner
 if id was not found earlier, use profile banner to get accountID and correct it for topN people
 
-direct-messaging-stats/dm_final_stats_processing.js - processes conversation to enable drawing graph 
+`direct-messaging-stats/dm_final_stats_processing.js` - processes conversation to enable drawing graph 
 available by clicking on fields in the dm stats file
 
