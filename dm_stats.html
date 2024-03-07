@@ -132,7 +132,7 @@
                     <div class="convo-container">
                         <img src="${convo.imageSrc}" alt="User Image" width="60" height="60">
                         <div class="convo-details">
-                            <div class="username">@${convo.recipientUsername.twitterUsername || 'Unknown'}</div>
+                            <div class="username">@${convo.recipientUsername || 'Unknown'}</div>
                             <div class="lastMessage">${date.slice(0, 10)}: ${convo.lastMessage}</div>
                             <div class="messageCount">
                                  Total: ${convo.totalMsgCount} 

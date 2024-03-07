@@ -3,5 +3,6 @@ node_modules
 mentions_count_folder
 twitter-archive
 .*
-pfp_dict.json
-headContent_dict.json
+*.json
+!package.json
+!package-lock.json
