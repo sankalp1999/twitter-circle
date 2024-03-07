@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Messages Frequency Chart</title>
+    <style>
+        :root {
+            --background-color: #f9e4bc;
+            --text-color: #CF2D01;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            /* Other styles remain unchanged */
+        }
+
+        .custom-section {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 20px;
+            margin: 10px;
+            border-radius: 5px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+</head>
+<body>
+    <h1>Hello</h1>
+    <canvas id="messagesChart" width="800" height="400"></canvas>
+    <script>
+            fetch('../dm_counts.json')
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById('messagesChart').getContext('2d');
+                const config = {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(data),
+                        datasets: [{
+                            label: 'Messages per Month Over 5 Years',
+                            backgroundColor: 'rgb(54, 162, 235)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            data: Object.values(data),
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                };
+                
+                new Chart(ctx, config);
+            })
+            .catch(error => console.error('Error loading chart data:', error));
+    </script>
+</body>
+</html>

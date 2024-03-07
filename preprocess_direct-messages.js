@@ -114,7 +114,7 @@ console.log(sortedRecipientAggregates)
 
 // Save the sorted data to dm_stats.json
 const resultsJson = JSON.stringify(sortedRecipientAggregates, null, 2)
-fs.writeFileSync('dm_stats.json', resultsJson, 'utf8')
+fs.writeFileSync('dm_sorted_by_message_count_and_last_message.json', resultsJson, 'utf8')
 
 // current time, decay exponent, and linear coefficient outside the loop
 const currentTime = new Date()

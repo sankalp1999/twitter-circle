@@ -98,6 +98,25 @@ const filePath = 'sortedCombinedWeights.json';
 			await browser.close()
 		}
         
+		const user_mentions_dict = fs.readFileSync('user_mentions_screen_name_mapping.json', 'utf8')
+		const userMentionsDict = JSON.parse(user_mentions_dict)
+		
+		// update missing username and id
+		const screenNameToId = userMentionsDict.screenNameToId
+		const idToScreenName = userMentionsDict.idToScreenName
+
+		let updatedScreenNameToId = {}
+		let updatedIdToScreenName = {}
+
+		results.forEach(result => {
+			const { twitterUsername, id, imageSrc } = result; // Extract necessary details from each result.
+			
+			// Update the mapping with a new structure.
+			updatedScreenNameToId[twitterUsername] = { id, imageSrc }
+			updatedIdToScreenName[id] = { twitterUsername, imageSrc }
+		})
+		
+
 		remainingEntries.forEach(([id, { twitterUsername, weight }]) => {
 			results.push({twitterUsername: twitterUsername, imageSrc: getPokemonImageUrl(), weight: weight, id: id})
 		})
@@ -115,13 +134,7 @@ const filePath = 'sortedCombinedWeights.json';
 			return acc
 		}, {})
 
-		const user_mentions_dict = fs.readFileSync('user_mentions_screen_name_mapping.json', 'utf8')
-		const userMentionsDict = JSON.parse(user_mentions_dict)
 		
-
-		// update missing username and id
-		const screenNameToId = userMentionsDict.screenNameToId
-		const idToScreenName = userMentionsDict.idToScreenName
 
 		
 		results.forEach((result) => {
@@ -133,8 +146,8 @@ const filePath = 'sortedCombinedWeights.json';
 				if (match) {
 					result.id = match[1] 
 
-					screenNameToId[result.twitterUsername] = result.id // Map username to ID
-           			idToScreenName[result.id] = result.twitterUsername
+					updatedScreenNameToId[result.twitterUsername] = { id: result.id, imageSrc: result.imageSrc } // Map username to ID
+           			updatedIdToScreenName[result.id] = { twitterUsername: result.twitterUsername, imageSrc: result.imageSrc }
 					console.log(result.id, result.twitterUsername)
 
 					// since earlier we added only mentionsCountWeighted count for this
@@ -144,25 +157,27 @@ const filePath = 'sortedCombinedWeights.json';
 						result.weight += additionalWeight
 					}
 				} else {
+					// If not fetching banner, then we don't have their username too
+
 					// console.log(`${result.twitterUsername} No ID found in bannerSrc`)
 					// Handle the case where no match is found, if necessary
 				}
 			}
 		})
 
-		
-		results.sort((a, b) => b.weight - a.weight)
-
-		const resultsJson = JSON.stringify(results, null, 2)
-		fs.writeFileSync('final_weights_with_pics.json', resultsJson, 'utf8')
-
-		fs.writeFileSync('user_mentions_screen_name_mapping.json', JSON.stringify(userMentionsDict, null, 2), 'utf8', (err) => {
+		fs.writeFileSync('user_mentions_screen_name_mapping.json', JSON.stringify({screenNameToId: updatedScreenNameToId, idToScreenName: updatedIdToScreenName}, null, 2), 'utf8', (err) => {
 			if (err) {
 			  console.error('An error occurred while writing the JSON to the file:', err)
 			} else {
 			  console.log('Successfully updated and saved the screen_name to id lookup with new data.')
 			}
 		  })
+
+		
+		results.sort((a, b) => b.weight - a.weight)
+
+		const resultsJson = JSON.stringify(results, null, 2)
+		fs.writeFileSync('final_weights_with_pics.json', resultsJson, 'utf8')
 
 		console.log('Successfully saved profile images data to file.')
 	} catch (err) {
