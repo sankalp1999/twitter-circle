@@ -8,18 +8,24 @@
 ## Features
 
 1. Make a Twitter Circle visualization for upto 200 users
-2. Check leaderboard based on *all* your mentions of other users and *all* direct messages
-3. Check DM stats like messages sent/recieved per user, total messages, last message with them
+2. Check leaderboard based on combined weights of *all* your mentions of other users and *all* direct messages
+3. Check DM stats (purely messages) like messages sent/recieved per user, total messages, last message with them
 4. DM bar graph where you can see messages/month for 5 years data
 
 ## Setup
 
-1. Clone the repository:
+1. [Download your Twitter archive.](https://help.twitter.com/en/managing-your-account/how-to-download-your-x-archive) 
+
+More (3 dot button) > Your Account > Download an archive of your data
+
+
+Clone the repository:
    ```
    git clone https://github.com/sankalp1999/twitter-circle.git
    ```
 
-2. Copy your Twitter archive into the project folder and rename the archive/zip file `twitter-archive`
+2.  Copy your Twitter archive into the project folder and rename the archive/zip file to `twitter-archive`
+You just have to ensure the archive is on the root folder of the project.
 
 
 3. Install Node.js (for Linux and macOS):
@@ -74,8 +80,10 @@ their accountId won't be known (and we won't be able to map from DM to here)
 `pfp_fetch_and_id_correction.js` - get the profile pictures using puppeteer from sotwe dot com, get profile banner
 if id was not found earlier, use profile banner to get accountID and correct it for topN people
 
+profile pictures are only fetched for topN people based on combined weights
+
 `direct-messaging-stats/dm_final_stats_processing.js` - processes conversation to enable drawing graph 
-available by clicking on fields in the dm stats file
+available by clicking on fields in the dm stats file. DM stats 
 
 ### Known Bugs
 - You may see some @notfound_userid in the stats table
