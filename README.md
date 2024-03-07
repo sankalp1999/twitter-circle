@@ -5,6 +5,13 @@
 
 ## A tool to visualize your Twitter network and direct messaging history
 
+## Features
+
+>Make a Twitter Circle visualization
+>Check leaderboard based on combined weights of your mentions and direct messages
+>Check DM stats like messages sent/recieved per user, total messages, last message with them
+>DM bar graph where you can see messages/month for 5 years data
+
 ### Setup
 
 1. Clone the repository:
@@ -70,3 +77,5 @@ if id was not found earlier, use profile banner to get accountID and correct it 
 `direct-messaging-stats/dm_final_stats_processing.js` - processes conversation to enable drawing graph 
 available by clicking on fields in the dm stats file
 
+### Known Bugs
+- You may see some @notfound_userid in the stats table
