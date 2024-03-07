@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DM Stats</title>
+    <link rel="icon" href="https://pbs.twimg.com/profile_images/1692481211888025600/lUJUEO_p_400x400.jpg" type="image/png">
     <style>
         body {
             font-family: Helvetica, Arial, sans-serif;
@@ -46,7 +47,7 @@
         }
         .messageCount {
             margin-left: auto;
-            font-size: large;
+            font-size: medium;
             font-weight: bold;
         }
         .lastMessage {
@@ -75,6 +76,26 @@
         #backButton:hover {
             background-color: #ecb679;
         }
+
+        .convo-container {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+         }
+
+        .convo-details {
+            display: flex;
+            flex-direction: column;
+            font-size: 1em;
+        }
+
+        .username, .lastMessage, .messageCount {
+            margin: 2px 0;
+        }
+
+        .messageCount {
+            font-size: 0.9em; /* Smaller text for less emphasis */
+        }
     </style>
 </head>
 <body>
@@ -88,7 +109,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            fetch('dm_stats.json')
+            fetch('dm_final_stats_with_chart.json')
                 .then(response => response.json())
                 .then(data => {
                     createDMStats(data);
@@ -104,17 +125,32 @@
                 
                 const convoElement = document.createElement('div');
                 convoElement.className = 'conversation';
+                const date = convo.lastMessageDate
+
+           
                 convoElement.innerHTML = `
-                    <img src="${convo.imageSrc}" alt="User Image" width="60" height="60">
-                    <div>
-                        <div class="username">@${convo.recipientUsername || 'Unknown'}</div>
-                        <div class="lastMessage">Last message:${convo.lastMessage.text}</div>
+                    <div class="convo-container">
+                        <img src="${convo.imageSrc}" alt="User Image" width="60" height="60">
+                        <div class="convo-details">
+                            <div class="username">@${convo.recipientUsername.twitterUsername || 'Unknown'}</div>
+                            <div class="lastMessage">${date.slice(0, 10)}: ${convo.lastMessage}</div>
+                            <div class="messageCount">
+                                 Total: ${convo.totalMsgCount} 
+                                 Sent: ${convo.messagesSent} 
+                                 Recieved: ${convo.messagesReceived}
+                            </div>
+                        </div>
                     </div>
-                    <div class="messageCount">Messages: ${convo.totalMessages}</div>
                 `;
+
+                // convoElement.onclick = function() {
+                //     window.open(`https://twitter.com/${convo.recipientUsername}`, '_blank');
+                // };
+
                 convoElement.onclick = function() {
-                    window.open(`https://twitter.com/${convo.recipientUsername}`, '_blank');
+                    window.location.href = `direct-messaging-stats/chart_draw.html?recipientId=${convo.recipientUserId}`; // Append the ID as a URL parameter
                 };
+
                 
                 convoWrapper.appendChild(convoElement);
                 dmStats.appendChild(convoWrapper);

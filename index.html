@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Twitter Circle Visualization</title>
+<link rel="icon" href="https://pbs.twimg.com/profile_images/1692481211888025600/lUJUEO_p_400x400.jpg" type="image/png">
 <script src="https://d3js.org/d3.v6.min.js"></script>
 <style>
     body {
@@ -181,7 +182,7 @@
     }
 
 
-    d3.json('pfp_dict.json').then(function(data) {
+    d3.json('final_weights_with_pics.json').then(function(data) {
         updateCenter();
     data = data.slice(0, 200)
     const maxProfiles = data.length;

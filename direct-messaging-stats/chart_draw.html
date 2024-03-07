@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Messages Frequency Chart</title>
+    <link rel="icon" href="https://pbs.twimg.com/profile_images/1692481211888025600/lUJUEO_p_400x400.jpg" type="image/png">
     <style>
         :root {
             --background-color: #f9e4bc;
@@ -11,7 +12,10 @@
         body {
             background-color: var(--background-color);
             color: var(--text-color);
-            /* Other styles remain unchanged */
+            display: flex;
+            justify-content: center; /* Center horizontally */
+             align-items: center; 
+             flex-direction: column;
         }
 
         .custom-section {
@@ -21,26 +25,92 @@
             margin: 10px;
             border-radius: 5px;
         }
+
+        #backButton {
+            position: absolute;
+            top: 90vh;
+            right: 2vw;
+            padding: 0.5vw 1vw;
+            font-size: large;
+            background-color: inherit;
+            color: #CF2D01;
+            font-family: Helvetica, Arial, sans-serif;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        #backButton:hover {
+            background-color: #ecb679;
+        }
+        .my-heading-class {
+   
+        font-family: Helvetica, Helvetica, Helvetica;
+        font-size: 24px; /* Example font size */
+
+          }
+
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 </head>
 <body>
-    <h1>Hello</h1>
+    <button id="backButton">Back</button>
     <canvas id="messagesChart" width="800" height="400"></canvas>
     <script>
-            fetch('../dm_counts.json')
+
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.location.href = '../dm_stats.html';
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+        
+            
+        const urlParams = new URLSearchParams(window.location.search);
+        const recipientId = urlParams.get('recipientId'); // Adjust the parameter name as needed
+
+        if (!recipientId) {
+            console.error('Recipient ID is missing in the URL');
+            return;
+        }
+
+        // Step 2: Fetch the JSON data
+        fetch('../dm_final_stats_with_chart.json')
             .then(response => response.json())
             .then(data => {
+                // Step 3: Find the specific entry by ID
+                
+                const entry = data.find(item => item.recipientUserId === recipientId); // Adjust to match your JSON structure
+                if (!entry) {
+                    console.error('Entry not found for the given ID');
+                    return;
+                }
+                
+                const heading = document.createElement('h1');
+                heading.textContent = 'Your DM history with '.concat(entry.recipientUsername.twitterUsername) // Set the text content of the heading
+                heading.id = 'my-heading-id';
+                heading.className = 'my-heading-class';
+                document.body.appendChild(heading);
+    
+     
+                // Step 4: Extract countsPerMonthYear
+                const countsPerMonthYear = entry.countsPerMonthYear; // Assuming this is the structure
+                if (!countsPerMonthYear) {
+                    console.error('countsPerMonthYear data is missing for the given entry');
+                    return;
+                }
+
+                // Step 5: Use this data to populate your chart
                 const ctx = document.getElementById('messagesChart').getContext('2d');
                 const config = {
                     type: 'bar',
                     data: {
-                        labels: Object.keys(data),
+                        labels: Object.keys(countsPerMonthYear),
                         datasets: [{
-                            label: 'Messages per Month Over 5 Years',
+                            label: 'Messages per Month',
                             backgroundColor: 'rgb(54, 162, 235)',
                             borderColor: 'rgb(54, 162, 235)',
-                            data: Object.values(data),
+                            data: Object.values(countsPerMonthYear),
                         }]
                     },
                     options: {
@@ -54,7 +124,11 @@
                 
                 new Chart(ctx, config);
             })
-            .catch(error => console.error('Error loading chart data:', error));
+            .catch(error => {
+                console.error('Failed to fetch or process the data', error);
+            });
+        });
+
     </script>
 </body>
 </html>
