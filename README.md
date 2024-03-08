@@ -18,6 +18,7 @@
 
     `More (3 dot button) > Your Account > Download an archive of your data`
 
+   It takes around 1-2 days.
 
     Clone the repository:
     ```
@@ -54,6 +55,10 @@ You just have to ensure the archive is on the root folder of the project.
    ```
    This command will start the Twitter Circle application.
 
+
+
+You may see some timeouts/errors for the profile picture script. A few misses are bound to happen.
+You can try rerunning the script or just proceed.
 
 ## Open to feedback
 
