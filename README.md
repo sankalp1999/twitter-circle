@@ -100,13 +100,15 @@ available by clicking on fields in the DM stats file.
 ### Username to user id without scraping
 
 
-
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">just look at the data bro. just stare at it. dont try to understand it, feel it. it&#39;s all about the flow of data. <a href="https://t.co/OPBjQz6JNy">pic.twitter.com/OPBjQz6JNy</a></p>&mdash; sankalp (@dejavucoder) <a href="https://twitter.com/dejavucoder/status/1765955846050029822?ref_src=twsrc%5Etfw">March 8, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 ![Staring at data is essential. It solves a lot of problems. ](static/image.png)
 
 ![user_mentions](static/tweet_example.png)
 
 We get free mapping between name and id. It took me sometime to realise this. I had already written the scraper.
 If you have replied to someone atleast once, then you have a valid mapping.
+
+
 
 
 ### Bugs and Limitations
