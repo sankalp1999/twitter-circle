@@ -92,23 +92,25 @@ if id was not found earlier, use profile banner to get accountID and use it to c
 
 This file is educational if you want to learn about basics of concurrent scraping.
 
-`direct-messaging-stats/dm_final_stats_processing.js` - Processes conversations to enable drawing graph 
+`direct-messaging-stats/dm_final_stats_processing.js` - preprocesses conversations to count messages/month for 5 years and enable drawing graph 
 available by clicking on fields in the DM stats file.
 
+`index.html` - show twitter circle, uses D3.js, vanilla html and css
+`leaderboard.html` - show ranking of your friends using combined weights of replies, mentions, DMs, vanilla html and css
+`dm_stats.html` - dm stats table, click on card to see chart
+`direct-messaging-stats/chart_draw.html` - graph using chart.js
 
 
-### Username to user id without scraping
+### Solving for username to user id mapping without scraping
 
 
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">just look at the data bro. just stare at it. dont try to understand it, feel it. it&#39;s all about the flow of data. <a href="https://t.co/OPBjQz6JNy">pic.twitter.com/OPBjQz6JNy</a></p>&mdash; sankalp (@dejavucoder) <a href="https://twitter.com/dejavucoder/status/1765955846050029822?ref_src=twsrc%5Etfw">March 8, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+Just look at the data like Lain. Stare at it.
 ![Staring at data is essential. It solves a lot of problems. ](static/image.png)
 
 ![user_mentions](static/tweet_example.png)
 
 We get free mapping between name and id. It took me sometime to realise this. I had already written the scraper.
 If you have replied to someone atleast once, then you have a valid mapping.
-
-
 
 
 ### Bugs and Limitations
@@ -121,6 +123,3 @@ because most people you talk to in DM you have replied to them atleast once on t
 
 if you really want to find them, you can try going to twitter.com/intent/user?user_id=user_id
 or try twitter.com/i/user/user_id. you need to be logged in for this.
-
-- @notfound_userid and Recieved:0 - These are not bugs. It looks like data from
-deleted accounts ceases to exist.
