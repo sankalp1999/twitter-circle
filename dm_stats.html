@@ -80,6 +80,8 @@
         .convo-container {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        width: 100%;
         gap: 20px;
          }
 
@@ -114,7 +116,11 @@
         white-space: nowrap;
         border: 1px solid #d9a993; /* Soft Orange for the border */
     }
-
+    .ranking {
+    margin-left: auto; /* Pushes the ranking to the right */
+    padding-right: 10px; /* Optional padding for aesthetic spacing */
+    font-weight: bold; /* Optional styling to make the ranking stand out */
+    }
 
     </style>
 </head>
@@ -139,7 +145,7 @@
 
         function createDMStats(conversations) {
             const dmStats = document.getElementById('dmStats');
-            conversations.forEach(convo => {
+            conversations.forEach((convo, index) => {
                 const convoWrapper = document.createElement('div');
                 convoWrapper.className = 'conversation-wrapper';
                 
@@ -147,7 +153,8 @@
                 convoElement.className = 'conversation';
                 const date = convo.lastMessageDate
 
-           
+
+
                 convoElement.innerHTML = `
                     <div class="convo-container">
                         <img src="${convo.imageSrc}" alt="User Image" width="60" height="60">
@@ -155,11 +162,12 @@
                             <div class="username">@${convo.recipientUsername || 'Unknown'}</div>
                             <div class="lastMessage">${date.slice(0, 10)}: ${convo.lastMessage}</div>
                             <div class="messageCount">
-                                 Total: ${convo.totalMsgCount} 
-                                 Sent: ${convo.messagesSent} 
-                                 Recieved: ${convo.messagesReceived}
+                                Total: ${convo.totalMsgCount} 
+                                Sent: ${convo.messagesSent} 
+                                ${convo.messagesReceived === 0 ? `Received: 0 <span style="color: red;">(Account deleted)</span>` : `Received: ${convo.messagesReceived}`}
                             </div>
                         </div>
+                        <div class="ranking">#${index + 1}</div> <!-- Displaying the ranking here -->
                     </div>
                 `;
 
