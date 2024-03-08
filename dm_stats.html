@@ -43,22 +43,23 @@
             margin-right: 10px;
         }
         .username {
-            font-weight: bold;
+            font-weight:inherit
         }
         .messageCount {
             margin-left: auto;
             font-size: medium;
-            font-weight: bold;
+            font-weight: inherit;
         }
         .lastMessage {
             font-size: 0.9em;
             margin: 5px 0;
             color: #CF2D01;
-            font-weight: bold;
-            padding: 2px 5px;
+            font-weight: inherit;
+            /* padding: 2px 5px; */
             border-radius: 5px;
             word-wrap: break-word;
         }
+
         #backButton {
             position: absolute;
             top: 2vh;
@@ -83,7 +84,8 @@
         justify-content: space-between;
         width: 100%;
         gap: 20px;
-         }
+        font-weight: 600;
+        }
 
         .convo-details {
             display: flex;
@@ -101,26 +103,26 @@
 
 
         /* experimental */
-
         .conversation:hover::after {
-        content: 'Click to view conversation stats';
+        content: 'view conversation history graph';
         position: absolute;
         bottom: -2em;
         left: 50%;
         transform: translateX(-50%);
-        background-color: #f2f2f2; /* Soft Light Grey */
+        background-color: #ecb679; /* Soft Light Grey */
         color: #a65336; /* Warm Deep Orange */
         padding: 5px;
         border-radius: 5px;
         font-size: 0.8em;
         white-space: nowrap;
         border: 1px solid #d9a993; /* Soft Orange for the border */
-    }
-    .ranking {
-    margin-left: auto; /* Pushes the ranking to the right */
-    padding-right: 10px; /* Optional padding for aesthetic spacing */
-    font-weight: bold; /* Optional styling to make the ranking stand out */
-    }
+        }
+
+        .ranking {
+        margin-left: auto; /* Pushes the ranking to the right */
+        padding-right: 10px; /* Optional padding for aesthetic spacing */
+        font-weight: bold; /* Optional styling to make the ranking stand out */
+        }
 
     </style>
 </head>
