@@ -107,7 +107,7 @@ available by clicking on fields in the DM stats file.
 Just look at the data like Lain. Stare at it.
 ![Staring at data is essential. It solves a lot of problems. ](static/image.png)
 
-![user_mentions](static/tweet_example.png)
+![user_mentions](static/user_example.png)
 
 We get free mapping between name and id. It took me sometime to realise this. I had already written the scraper.
 If you have replied to someone atleast once, then you have a valid mapping.
