@@ -1,4 +1,4 @@
-# Twitter Circle (README is work in progress)
+# Twitter Circle
 
 
 ![Twitter Circle](static/twitter-circle.png)
@@ -57,8 +57,19 @@ You just have to ensure the archive is on the root folder of the project.
 
 
 
-You may see some timeouts/errors for the profile picture script. A few misses are bound to happen.
-You can try rerunning the script or just proceed.
+You may see some timeouts/errors for the profile picture script. You can still proceed
+or if too many pictures are missing, please re-run the script.
+
+## Share Screenshots
+
+Don't forget to share screenshots. If you are feeling courageous, I dare you to share your DM stat leaderboard screenshots.
+
+### Screenshotting tips
+- Exclude the slider from the image. You may choose to include Anya too, she is placed above the slider
+- If you are going for 150 or 200, I recommend zooming out browser till it fits (67%)
+
+
+
 
 ## Open to feedback
 
