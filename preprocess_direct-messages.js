@@ -99,7 +99,7 @@ const recipientAggregates = dmData.reduce((acc, conversation) => {
 
 	// only goes through messages of that convo
 	messages.forEach(message => {
-		if (message.messageCreate.senderId === accountId) {
+		if (message.messageCreate?.senderId === accountId) {
 			acc[recipientId].messagesSent += 1
 		} else {
 			acc[recipientId].messagesReceived += 1
@@ -108,7 +108,7 @@ const recipientAggregates = dmData.reduce((acc, conversation) => {
 
 	// Determine the last message for this recipient
 	const lastMessageInConversation = messages.reduce((latest, current) => {
-		const currentCreatedAt = new Date(current.messageCreate.createdAt)
+		const currentCreatedAt = new Date(current.messageCreate?.createdAt)
 		if (!latest || currentCreatedAt > new Date(latest.createdAt)) {
 			return { text: current.messageCreate.text, createdAt: current.messageCreate.createdAt }
 		}

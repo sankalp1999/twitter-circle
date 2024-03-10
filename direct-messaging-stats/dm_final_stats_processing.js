@@ -65,7 +65,7 @@ function processConversations(allData, recipientUserId, recipientUsername, image
 	// Populate the message counts for each filtered conversation
 	filteredConversations.forEach(conversation => {
 		conversation.dmConversation.messages.forEach(msg => {
-			const date = new Date(msg.messageCreate.createdAt)
+			const date = new Date(msg.messageCreate?.createdAt)
 			const monthYear = `${date.getMonth() + 1}-${date.getFullYear()}`
 
 			if (countsPerMonthYear.hasOwnProperty(monthYear)) {
