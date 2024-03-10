@@ -60,7 +60,7 @@ You just have to ensure the archive is on the root folder of the project.
 You may see some timeouts/errors for the profile picture script. You can still proceed
 or if too many pictures are missing, please re-run the script.
 
-## Share Screenshots
+## Don't Forget to share screenshots!
 
 Don't forget to share screenshots. If you are feeling courageous, I dare you to share your DM stat leaderboard screenshots.
 
