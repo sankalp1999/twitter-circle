@@ -10,6 +10,9 @@ set -e
 
 git pull
 
+echo "Installing npm dependencies in case user missed..."
+npm install
+
 echo "Running extract_mentions_and_dump.js"
 node extract_mentions_and_dump.js
 
