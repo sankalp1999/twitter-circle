@@ -104,6 +104,7 @@ This file is educational if you want to learn about basics of concurrent scrapin
 available by clicking on fields in the DM stats file.
 
 `index.html` - show twitter circle, uses D3.js, vanilla html and css
+> NOTE: Psyduck is used as a fallback image if image fetch on source URL(retrieved from sotwe dot com) fails
 
 `leaderboard.html` - show ranking of your friends using combined weights of replies, mentions, DMs, vanilla html and css
 

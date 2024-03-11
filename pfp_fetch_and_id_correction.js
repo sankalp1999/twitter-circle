@@ -5,7 +5,13 @@ const isReachable = require('is-reachable')
 
 const getPokemonImageUrl = () => {
 	const baseUrl = 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/'
-	const pokemonNumber = Math.floor(Math.random() * 1000)
+	let pokemonNumber;
+	// repeating random number generation if we get 54 as the result
+	// cause we are using this pokemon number as a fallback image 
+	// when image src URL fails to fetch the image
+    do {
+        pokemonNumber = Math.floor(Math.random() * 1000);
+    } while (pokemonNumber === 54);
 	const paddedNumber = pokemonNumber.toString().padStart(3, '0')
 	return  `${baseUrl}${paddedNumber}.png`
 }
