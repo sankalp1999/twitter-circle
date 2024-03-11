@@ -83,7 +83,7 @@ Don't forget to share screenshots. If you are feeling courageous, I dare you to 
 Let me know in the DMs or maybe PRs. I don't primarily write JS so open to suggestions
 to make the code or UI better.
 
-## Flow of execution
+## Flow of execution (Just FYI optional info)
 
 ### relevant files used from the archive 
 
