@@ -268,6 +268,7 @@ function drawNodes(filteredData) {
                 .attr('src', d.imageSrc)
                 .style('width', '100%')
                 .style('height', '100%')
+                .attr('onerror', "this.src='https://assets.pokemon.com/assets/cms2/img/pokedex/full/054.png'")
                 .on('click', () => window.open(`https://twitter.com/${d.twitterUsername}`, '_blank'));
         });
     }
