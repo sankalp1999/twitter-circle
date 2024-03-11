@@ -1,4 +1,1 @@
-{"dependencies":{"http-server":"^14.1.1","open":"^10.0.4","puppeteer":"^22.3.0"},
-"scripts": {
-    "start": "node start_server.js"
-  }}
+{"dependencies":{"http-server":"^14.1.1","is-reachable":"^5.2.1","open":"^10.0.4","puppeteer":"^22.3.0"},"scripts":{"start":"node start_server.js"}}
