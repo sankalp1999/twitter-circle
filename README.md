@@ -4,63 +4,61 @@
 
 ## A tool to visualize your Twitter network and direct messaging history
 
-## Features
+### Features
 
-1. Make a Twitter Circle visualization for up to 200 users
-2. Check leaderboard based on combined weights of *all* your mentions of other users and *all* direct messages
-3. Check DM stats (purely messages) like messages sent/received per user, total messages, last message with them
-4. DM bar graph where you can see messages/month for 5 years data
+1. **Make a Twitter Circle visualization** for up to 200 users.
+2. **Check leaderboard** based on combined weights of *all* your mentions of other users and *all* direct messages.
+3. **Check DM stats** message count per recipient, messages sent/received per user, total messages, last message with them
+4. **DM bar graph** where you can see messages/month for 5 years data.
 
-## Setup
+### Setup
 
-1. [Download your Twitter archive.](https://help.twitter.com/en/managing-your-account/how-to-download-your-x-archive)
+1. **Download your Twitter archive.**
 
-`More (3 dot button) > Settings and Privacy > Your Account > Download an archive of your data`
+   - Go to: `More (3 dot button) > Settings and Privacy > Your Account > Download an archive of your data`.
+   - Note: It takes around 1-2 days for Twitter to prepare your archive data.
 
-Note: It takes around 1-2 days for twitter to prepare your archive data.
+   **Clone the repository:**
 
-Clone the repository:
+   ```bash
+   git clone https://github.com/sankalp1999/twitter-circle.git --depth 1
+   ```
 
-```bash
-git clone https://github.com/sankalp1999/twitter-circle.git --depth 1
-```
+2. **Copy your Twitter archive into the project folder and rename the archive/zip file to `twitter-archive`.** You have to ensure the archive is on the root folder of the project.
 
-1. Copy your Twitter archive into the project folder and rename the archive/zip file to `twitter-archive`. You  have to ensure the archive is on the root folder of the project.
+3. **Install Node.js (for Linux and MacOS)**
 
-1. Install Node.js (for Linux and MacOS)
+   - Visit the official Node.js website: <https://nodejs.org>
+   - Download the appropriate version for your operating system.
+   - Follow the installation instructions provided on the website.
 
-- Visit the official Node.js website: <https://nodejs.org>
-- Download the appropriate version for your operating system
-- Follow the installation instructions provided on the website
+4. **Install project dependencies**
 
-1. Install project dependencies
+   ```bash
+   npm install
+   ```
 
-```bash
-npm install
-```
+   This command will install all the necessary packages listed in the `package.json` file.
 
-This command will install all the necessary packages listed in the `package.json` file.
+5. **Set up the project (Linux and macOS)**
 
-1. Set up the project (Linux and macOS)
+   ```bash
+   ./setup.sh
+   ```
 
-```bash
-./setup.sh
-```
+6. **Start the application**
 
-1. Start the application
+   ```bash
+   npm start
+   ```
 
-```bash
-npm start
-```
+   This command will start the Twitter Circle application.
 
-This command will start the Twitter Circle application.
+   You may see some timeouts/errors for the profile picture script. You can still proceed, or if too many pictures are missing, please re-run the script.
 
-You may see some timeouts/errors for the profile picture script. You can still proceed
-or if too many pictures are missing, please re-run the script.
+**Customer support:** Early access users contact me [https://twitter.com/dejavucoder](https://twitter.com/dejavucoder)
 
-Customer support: early access users contact me [https://twitter.com/dejavucoder](https://twitter.com/dejavucoder)
-
-NOTE: If you have already cloned, run `git pull` to fetch latest updates.
+**NOTE:** If you have already cloned, run `git pull` to fetch the latest updates.
 
 ## Don't Forget to share screenshots!
 
