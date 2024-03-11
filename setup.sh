@@ -7,6 +7,9 @@ set -e
 # cd /path/to/your/js/files
 
 # Run each JavaScript file in synchronous order
+
+git pull
+
 echo "Running extract_mentions_and_dump.js"
 node extract_mentions_and_dump.js
 

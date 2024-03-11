@@ -66,8 +66,8 @@ Don't forget to share screenshots. If you are feeling courageous, I dare you to 
 
 ### Screenshotting tips
 
-- Exclude the slider from the image. You may choose to include Anya too, she is placed above the slider
-- If you are going for 150 or 200, I recommend zooming out browser till it fits (67%)
+- Zoom out enough to make sure all profile pictures fit in the image (can someone help improve this!)
+- Exclude the slider from the image. You may include Anya, she is placed above the slider
 
 ## Open to feedback
 
