@@ -52,9 +52,7 @@
    npm start
    ```
 
-   This command will start the Twitter Circle application.
-
-   You may see some timeouts/errors for the profile picture script. You can still proceed, or if too many pictures are missing, please re-run the script.
+   This command will start the Twitter Circle application. Share screenshots of your top 100 now!
 
 **Customer support:** Early access users contact me [https://twitter.com/dejavucoder](https://twitter.com/dejavucoder)
 
@@ -62,14 +60,11 @@
 
 ## Share screenshots and tag your inner circle!
 
-Don't forget to share screenshots. 
+**Share screenshots** of your top 50, 100, 200 whatever you feel like and let your mutuals know
+by tagging! **Zoom out** browser enough to let the images fit in and exclude slider
+for better screenshot.
 
 If you are feeling courageous, I dare you to share your DM stat leaderboard screenshots.
-
-### Screenshotting tips
-
-- Zoom out enough to make sure all profile pictures fit in the image (can someone help improve this!)
-- Exclude the slider from the image. You may include Anya, she is placed above the slider
 
 ## Open to feedback
 
