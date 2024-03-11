@@ -11,80 +11,128 @@ const getPokemonImageUrl = () => {
 }
 
 
+// const fetchAvatarFromTwitter = async (page, twitterUsername) => {
+// 	await page.goto(`https://twitter.com/${twitterUsername}/photo`, { waitUntil: 'domcontentloaded' })
+// 	const title = await page.evaluate(() => document.querySelector('title')?.innerText)
+// 	const textExists = await page.evaluate(() => document.body.textContent.includes('This account doesn’t exist'))
+
+// 	if (textExists || title === 'Profile / X') {
+// 		console.log('Account does not exist, skipping')
+// 		return null
+// 	}
+
+// 	await page.waitForSelector('img[alt="Image"][draggable="true"]', { timeout: 10000 })
+// 	const imageSrc = await page.evaluate(() => {
+// 		const image = document.querySelector('img[alt="Image"][draggable="true"]')
+// 		return image ? image.src : null
+// 	})
+// 	return imageSrc
+// }
+
+const fetchAvatarFromSotwe = async (page, twitterUsername, id) => {
+	await page.goto(`https://sotwe.com/${twitterUsername}`, { waitUntil: 'domcontentloaded' })
+	const title = await page.evaluate(() => document.querySelector('title')?.innerText)
+
+	if (title === 'Twitter Web Viewer & Trend Analyzer & Downloader | Sotwe') {
+		console.log('Account does not exist, skipping')
+		return { imageSrc: null, bannerSrc: null }
+	}
+
+
+	await page.waitForSelector(`img[alt="${twitterUsername}'s profile image"]`, { timeout: 10000 })
+	const imageSrc = await page.evaluate((twitterUsername) => {
+		const image = document.querySelector(`img[alt="${twitterUsername}'s profile image"]`)
+		return image ? image.src : null
+	}, twitterUsername)
+
+	if(imageSrc && imageSrc.startsWith('data:image')) {
+		throw new Error(`Image source for ${twitterUsername} is a data URL, not a link. Retrying`)
+	}
+
+	let bannerSrc = 'already_exists'
+	if (id.includes('notfound')) {
+		await page.waitForSelector(`img[alt="${twitterUsername}'s profile banner image"]`, { timeout: 10000 })
+		bannerSrc = await page.evaluate((twitterUsername) => {
+			const image = document.querySelector(`img[alt="${twitterUsername}'s profile banner image"]`)
+			return image ? image.src : null
+		}, twitterUsername)
+	}
+
+	return { imageSrc, bannerSrc }
+}
+
+const fetchAvatarFromTwstalker = async (page, twitterUsername, id) => {
+
+	await page.goto(`https://twstalker.com/${twitterUsername}`, { waitUntil: 'domcontentloaded' }, {timeout: 5000})
+
+	// I don't want to retry so skip accounts do not exist using simple logic
+	const areAllCountsZero = await page.evaluate(() => {
+		const numbrElements = Array.from(document.querySelectorAll('.dscun-numbr'))
+		return numbrElements.every(element => parseInt(element.textContent.replace('K', '000')) === 0)
+			  })
+	
+
+	if(areAllCountsZero) {
+		console.log(`Account does not exist or deactivated: ${twitterUsername}`)
+		return {twitterUsername: twitterUsername, imageSrc: getPokemonImageUrl(), bannerSrc: null,  id: id}
+	}
+
+	await page.waitForSelector('a.thumbnail img.img-thumbnail', {timeout: 5000}) 
+	let imageSrc = await page.$eval('a.thumbnail img.img-thumbnail', img => img.src)
+	
+
+	let bannerSrc = 'already_exists'
+	if (id.includes('notfound')) {
+		bannerSrc = await page.evaluate(() => {
+			const element = document.querySelector('.todo-thumb1.dash-bg-image1.dash-bg-overlay')
+			// Extract the URL part from the `background-image` CSS property
+			const style = window.getComputedStyle(element)
+			const bgImage = style.backgroundImage // e.g., url("http://example.com/image.jpg")
+			return bgImage.replace(/url\(["']?(.*?)["']?\)/, '$1') // Remove url("...") wrapper
+		  })
+	}
+
+	return { imageSrc, bannerSrc }
+}
+
 const getAvatar = async (id, twitterUsername, browser, weight, isReachablePrimary) => {
 	let attempts = 2
 	for (let i = 0; i < attempts; i++) {
 		const page = await browser.newPage()
 		await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36')
 		try {
-			// backup code only to be used when sotwe is down
-			if (!isReachablePrimary) {				
-
-				await page.goto(`https://twitter.com/${twitterUsername}/photo`, { waitUntil: 'domcontentloaded' })
-		
-				const title = await page.evaluate(() => document.querySelector('title')?.innerText)
-				const textExists = await page.evaluate(() => {
-					return document.body.textContent.includes('This account doesn’t exist')
-				})
-
-				if (textExists || title === 'Profile / X') {
-					console.log('Account does not exist, skipping')
-					return {twitterUsername: twitterUsername, imageSrc: getPokemonImageUrl(), bannerSrc: null, weight: weight, id: id}
-				}
-			
-				await page.waitForSelector('img[alt="Image"][draggable="true"]', { timeout: 10000 })
-
-				const imageSrc = await page.evaluate(() => {
-					const image = document.querySelector('img[alt="Image"][draggable="true"]')
-					return image ? image.src : null
-				})
-
-				console.log(`${twitterUsername}: ${imageSrc}`)
-				return {twitterUsername: twitterUsername, imageSrc, bannerSrc: null, weight, id}
-			} else {
-
-				await page.goto(`https://sotwe.com/${twitterUsername}`, { waitUntil: 'domcontentloaded' }, {timeout: 5000})
-
-				const title = await page.evaluate(() => document.querySelector('title')?.innerText)
-
-				if (title.includes('Twitter Web Viewer & Trend Analyzer & Downloader | Sotwe')) {
-					console.log('Account does not exist, skipping')
-					return {twitterUsername: twitterUsername, imageSrc: getPokemonImageUrl(), bannerSrc: null, weight: weight, id: id}
-				}
-
-				await page.waitForSelector(`img[alt="${twitterUsername}'s profile image"]`, { timeout: 10000 })
-				const imageSrc = await page.evaluate((twitterUsername) => {
-					const image = document.querySelector(`img[alt="${twitterUsername}'s profile image"]`)
-					return image ? image.src : null
-				}, twitterUsername)
-
-				if (imageSrc && imageSrc.startsWith('data:image')) {
-					throw new Error(`Image source for ${twitterUsername} is a data URL, not a link.`)
-				}
-				console.log(`${twitterUsername}: ${imageSrc}`)
-				let bannerSrc = 'already_exists'
-				if (id.includes('notfound')) {
-					await page.waitForSelector(`img[alt="${twitterUsername}'s profile banner image"]`, { timeout: 10000 })
-				    bannerSrc = await page.evaluate((twitterUsername) => {
-						const image = document.querySelector(`img[alt="${twitterUsername}'s profile banner image"]`)
-						return image ? image.src : null
-					}, twitterUsername)
-					console.log(`${twitterUsername}: ${bannerSrc}`)
+			let result
+			// sotwe keeps image for deactivated accounts too hence using it first
+			if (isReachablePrimary && i === 0) {
+				let { imageSrc, bannerSrc } = await fetchAvatarFromSotwe(page, twitterUsername, id)
 				
+				if(!imageSrc) {
+					imageSrc = getPokemonImageUrl()
 				}
-				return {twitterUsername: twitterUsername, imageSrc, bannerSrc, weight, id}
+				
+				result = {twitterUsername, imageSrc, bannerSrc, weight, id}
+
+			} else {
+				let { imageSrc, bannerSrc } = await fetchAvatarFromTwstalker(page, twitterUsername, id)
+
+				if(!imageSrc) {
+					imageSrc = getPokemonImageUrl()
+				}
+				result = {twitterUsername, imageSrc, bannerSrc, weight, id}
 			}
-		
+			console.log(`${twitterUsername}: ${result.imageSrc}`)
+			return result
 		} catch (error) {
 			console.error(`Attempt ${i + 1} failed for ${twitterUsername}: ${error.message}`)
 			if (i === attempts - 1) {
-				return {twitterUsername: twitterUsername, imageSrc: getPokemonImageUrl(), bannerSrc: null, weight: weight, id: id}
+				return {twitterUsername, imageSrc: getPokemonImageUrl(), bannerSrc: null, weight, id}
 			}
 		} finally {
 			await page.close()
 		}
 	}
 }
+
 
 const chunkArray = (array, size) => {
 	const chunkedArr = []
@@ -97,7 +145,7 @@ const chunkArray = (array, size) => {
 const processChunk = async (chunk, browser) => {
 	const primaryWebsite = 'sotwe.com'
 	const isReachablePrimary = await isReachable(primaryWebsite)
-	isReachablePrimary ? console.log('fetching from sotwe') : console.log('fallback code')
+	isReachablePrimary ? console.log('fetching from twstalker') : console.log('sotwe')
 	return await Promise.all(chunk.map(([id, { twitterUsername, weight }]) => getAvatar(id, twitterUsername, browser, weight, isReachablePrimary)))
 }
 
