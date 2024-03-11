@@ -7,7 +7,7 @@
 ## Features
 
 1. Make a Twitter Circle visualization for up to 200 users
-2. Check leader board based on combined weights of *all* your mentions of other users and *all* direct messages
+2. Check leaderboard based on combined weights of *all* your mentions of other users and *all* direct messages
 3. Check DM stats (purely messages) like messages sent/received per user, total messages, last message with them
 4. DM bar graph where you can see messages/month for 5 years data
 
@@ -100,7 +100,7 @@ The mapping will work if you have replied to the person at least once otherwise 
 
 This file is educational if you want to learn about basics of concurrent scraping.
 
-`direct-messaging-stats/dm_final_stats_processing.js` - pre-processes conversations to count messages/month for 5 years and enable drawing graph 
+`direct-messaging-stats/dm_final_stats_processing.js` - preprocesses conversations to count messages/month for 5 years and enable drawing graph 
 available by clicking on fields in the DM stats file.
 
 `index.html` - show twitter circle, uses D3.js, vanilla html and css
