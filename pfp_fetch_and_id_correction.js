@@ -95,7 +95,7 @@ const chunkArray = (array, size) => {
 }
 
 const processChunk = async (chunk, browser) => {
-	const primaryWebsite = 'https://sotwe.com'
+	const primaryWebsite = 'sotwe.com'
 	const isReachablePrimary = await isReachable(primaryWebsite)
 	isReachablePrimary ? console.log('fetching from sotwe') : console.log('fallback code')
 	return await Promise.all(chunk.map(([id, { twitterUsername, weight }]) => getAvatar(id, twitterUsername, browser, weight, isReachablePrimary)))
