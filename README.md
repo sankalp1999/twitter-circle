@@ -16,7 +16,7 @@
 
 1. [Download your Twitter archive.](https://help.twitter.com/en/managing-your-account/how-to-download-your-x-archive) 
 
-    `More (3 dot button) > Your Account > Download an archive of your data`
+    `More (3 dot button) > Settings and Privacy > Your Account > Download an archive of your data`
 
    It takes around 1-2 days.
 
