@@ -22,7 +22,7 @@
 
     Clone the repository:
     ```
-    git clone https://github.com/sankalp1999/twitter-circle.git
+    git clone https://github.com/sankalp1999/twitter-circle.git --depth 1
     ```
 
 2.  Copy your Twitter archive into the project folder and rename the archive/zip file to `twitter-archive`
