@@ -16,42 +16,58 @@ const getAvatar = async (id, twitterUsername, browser, weight) => {
 		await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36')
 		try {
 
-			// await page.goto(`https://twitter.com/${twitterUsername}/photo`, { waitUntil: 'domcontentloaded' })
-			// await page.waitForSelector('img[alt="Image"][draggable="true"]', { timeout: 10000 })
-			// const imageSrc = await page.evaluate(() => {
-			// 	const image = document.querySelector('img[alt="Image"][draggable="true"]')
-			// 	return image ? image.src : null
-			// })
 
-			await page.goto(`https://sotwe.com/${twitterUsername}`, { waitUntil: 'domcontentloaded' }, {timeout: 5000})
+			// backup code only to be used when sotwe is down
 
+			await page.goto(`https://twitter.com/${twitterUsername}/photo`, { waitUntil: 'domcontentloaded' })
+		
 			const title = await page.evaluate(() => document.querySelector('title')?.innerText)
+			const textExists = await page.evaluate(() => {
+				return document.body.textContent.includes('This account doesn’t exist')
+			})
 
-			if (title.includes('Twitter Web Viewer & Trend Analyzer & Downloader | Sotwe')) {
+			if (textExists || title === 'Profile / X') {
 				console.log('Account does not exist, skipping')
 				return {twitterUsername: twitterUsername, imageSrc: getPokemonImageUrl(), bannerSrc: null, weight: weight, id: id}
 			}
+			
+			
+			await page.waitForSelector('img[alt="Image"][draggable="true"]', { timeout: 10000 })
 
-			await page.waitForSelector(`img[alt="${twitterUsername}'s profile image"]`, { timeout: 10000 })
-			const imageSrc = await page.evaluate((twitterUsername) => {
-				const image = document.querySelector(`img[alt="${twitterUsername}'s profile image"]`)
+			const imageSrc = await page.evaluate(() => {
+				const image = document.querySelector('img[alt="Image"][draggable="true"]')
 				return image ? image.src : null
-			}, twitterUsername)
+			})
 
-			if (imageSrc && imageSrc.startsWith('data:image')) {
-				throw new Error(`Image source for ${twitterUsername} is a data URL, not a link.`)
-			}
+			// await page.goto(`https://sotwe.com/${twitterUsername}`, { waitUntil: 'domcontentloaded' }, {timeout: 5000})
+
+			// const title = await page.evaluate(() => document.querySelector('title')?.innerText)
+
+			// if (title.includes('Twitter Web Viewer & Trend Analyzer & Downloader | Sotwe')) {
+			// 	console.log('Account does not exist, skipping')
+			// 	return {twitterUsername: twitterUsername, imageSrc: getPokemonImageUrl(), bannerSrc: null, weight: weight, id: id}
+			// }
+
+			// await page.waitForSelector(`img[alt="${twitterUsername}'s profile image"]`, { timeout: 10000 })
+			// const imageSrc = await page.evaluate((twitterUsername) => {
+			// 	const image = document.querySelector(`img[alt="${twitterUsername}'s profile image"]`)
+			// 	return image ? image.src : null
+			// }, twitterUsername)
+
+			// if (imageSrc && imageSrc.startsWith('data:image')) {
+			// 	throw new Error(`Image source for ${twitterUsername} is a data URL, not a link.`)
+			// }
 			console.log(`${twitterUsername}: ${imageSrc}`)
 			let bannerSrc = 'already_exists'
-			if (id.includes('notfound')) {
-				await page.waitForSelector(`img[alt="${twitterUsername}'s profile banner image"]`, { timeout: 10000 })
-				    bannerSrc = await page.evaluate((twitterUsername) => {
-					const image = document.querySelector(`img[alt="${twitterUsername}'s profile banner image"]`)
-					return image ? image.src : null
-				}, twitterUsername)
-				console.log(`${twitterUsername}: ${bannerSrc}`)
+			// if (id.includes('notfound')) {
+			// 	await page.waitForSelector(`img[alt="${twitterUsername}'s profile banner image"]`, { timeout: 10000 })
+			// 	    bannerSrc = await page.evaluate((twitterUsername) => {
+			// 		const image = document.querySelector(`img[alt="${twitterUsername}'s profile banner image"]`)
+			// 		return image ? image.src : null
+			// 	}, twitterUsername)
+			// 	console.log(`${twitterUsername}: ${bannerSrc}`)
 				
-			}
+			// }
 			return {twitterUsername: twitterUsername, imageSrc, bannerSrc, weight, id}
 		} catch (error) {
 			console.error(`Attempt ${i + 1} failed for ${twitterUsername}: ${error.message}`)
