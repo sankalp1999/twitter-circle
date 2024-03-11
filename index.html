@@ -101,7 +101,7 @@
     #cornerImage {
         position: absolute;
         bottom: 4vh;
-        left: 9vw;
+        left: 6vw;
         width: auto; /* Adjust the width automatically to maintain aspect ratio */
         height: 25vh; /* Start with a relative height, adjust as needed */
         max-width: 35vw; /* Ensures the image does not exceed this width */
@@ -196,7 +196,7 @@
     nodeRadius = 30, // Radius for the profile images
     spacingBetweenNodes = 2, // Spacing between nodes
     spacingBetweenCircles = 20; // Spacing between concentric circles
-
+    let centralNodeRadius = nodeRadius * 1.5;
 
     // Function to calculate positions
     function calculatePositions(data, startRadius) {
@@ -206,9 +206,10 @@
         nodesInThisCircle,
         circumference;
 
+   
     // Place the center node
     if (data.length > 0 && data[0].imageSrc !== null) {
-        positions.push({ twitterUsername: data[0].twitterUsername, imageSrc: data[0].imageSrc, x: center.x, y: center.y });
+        positions.push({ twitterUsername: data[0].twitterUsername, imageSrc: data[0].imageSrc, x: center.x, y: center.y, radius: centralNodeRadius });
     }
 
     // Start from the second item if the first one is used for the center node
@@ -240,26 +241,29 @@ function drawNodes(filteredData) {
         // Clear existing SVG content
         svg.selectAll("*").remove();
 
+
+
         const nodePositions = calculatePositions(filteredData, nodeRadius * 2 + spacingBetweenCircles);
         const simulation = d3.forceSimulation(nodePositions)
             .force("center", d3.forceCenter(center.x, center.y))
             .force("collide", d3.forceCollide().radius(d => nodeRadius * 1.5).strength(0.7));
 
         // Run the simulation for a few iterations
-        for (let i = 0; i < 10; ++i) simulation.tick();
+        for (let i = 0; i < 15; ++i) simulation.tick();
 
         // Draw the nodes
         nodePositions.forEach(function(d) {
+            const currentRadius = d.radius || nodeRadius; 
             const foreignObject = svg.append('foreignObject')
                 .attr('class', 'node-foreign-object')
-                .attr('x', d.x - nodeRadius)
-                .attr('y', d.y - nodeRadius)
-                .attr('width', nodeRadius * 2)
-                .attr('height', nodeRadius * 2);
+                .attr('x', d.x - currentRadius)
+                .attr('y', d.y - currentRadius)
+                .attr('width', currentRadius * 2)
+                .attr('height', currentRadius * 2);
 
             const div = foreignObject.append('xhtml:div')
-                .style('width', `${nodeRadius * 2}px`)
-                .style('height', `${nodeRadius * 2}px`)
+                .style('width', `${currentRadius * 2}px`)
+                .style('height', `${currentRadius * 2}px`)
                 .style('border-radius', '50%')
                 .style('overflow', 'hidden');
 

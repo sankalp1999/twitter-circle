@@ -66,14 +66,9 @@ for better screenshot.
 
 If you are feeling courageous, I dare you to share your DM stat leaderboard screenshots.
 
-## Open to feedback
+## Flow of execution (optional FYI)
 
-Let me know in the DMs or maybe PRs. I don't primarily write JS so open to suggestions
-to make the code or UI better.
-
-## Flow of execution (Just FYI optional info)
-
-### relevant files used from the archive
+### Relevant files used from the archive
 
 - `account.js` - contains basic detail of your account like accountId and userhandle/screenname 
 - `tweets.js` - contains all your tweets (normal tweet, replies, quote tweets) with data like reply mentions, quote tweet url, text, media url
