@@ -11,25 +11,14 @@ const getPokemonImageUrl = () => {
 }
 
 
-
-
-
-const getAvatar = async (id, twitterUsername, browser, weight) => {
+const getAvatar = async (id, twitterUsername, browser, weight, isReachablePrimary) => {
 	let attempts = 2
 	for (let i = 0; i < attempts; i++) {
 		const page = await browser.newPage()
 		await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36')
 		try {
-
-
-			const primaryWebsite = 'https://sotwe.com'
-			const backupWebsite = `https://twitter.com/${twitterUsername}/photo`
-
-			const isReachablePrimary = await isReachable(primaryWebsite)
-			
 			// backup code only to be used when sotwe is down
-			if (!isReachablePrimary) {
-				
+			if (!isReachablePrimary) {				
 
 				await page.goto(`https://twitter.com/${twitterUsername}/photo`, { waitUntil: 'domcontentloaded' })
 		
@@ -42,7 +31,6 @@ const getAvatar = async (id, twitterUsername, browser, weight) => {
 					console.log('Account does not exist, skipping')
 					return {twitterUsername: twitterUsername, imageSrc: getPokemonImageUrl(), bannerSrc: null, weight: weight, id: id}
 				}
-			
 			
 				await page.waitForSelector('img[alt="Image"][draggable="true"]', { timeout: 10000 })
 
@@ -107,7 +95,10 @@ const chunkArray = (array, size) => {
 }
 
 const processChunk = async (chunk, browser) => {
-	return await Promise.all(chunk.map(([id, { twitterUsername, weight }]) => getAvatar(id, twitterUsername, browser, weight)))
+	const primaryWebsite = 'https://sotwe.com'
+	const isReachablePrimary = await isReachable(primaryWebsite)
+	isReachablePrimary ? console.log('fetching from sotwe') : console.log('fallback code')
+	return await Promise.all(chunk.map(([id, { twitterUsername, weight }]) => getAvatar(id, twitterUsername, browser, weight, isReachablePrimary)))
 }
 
 const filePath = 'sortedCombinedWeights.json';
