@@ -60,7 +60,12 @@ You just have to ensure the archive is on the root folder of the project.
 You may see some timeouts/errors for the profile picture script. You can still proceed
 or if too many pictures are missing, please re-run the script.
 
-Customer support: contact me [here](https://twitter.com/dejavucoder)
+Customer support: early access users contact me [here](https://twitter.com/dejavucoder)
+
+P.S
+
+If you have already cloned, just git pull once to fetch latest updates.
+`git pull`
 
 ## Don't Forget to share screenshots!
 
