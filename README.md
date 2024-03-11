@@ -1,6 +1,6 @@
 # Twitter Circle
 
-![Twitter Circle](static/twitter-circle.png)
+![Twitter Circle](static/example2.png)
 
 ## A tool to visualize your Twitter network and direct messaging history
 
