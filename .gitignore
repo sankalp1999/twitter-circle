@@ -6,3 +6,4 @@ twitter-archive
 *.json
 !package.json
 !package-lock.json
+bun.lockb
