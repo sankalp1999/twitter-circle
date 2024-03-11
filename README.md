@@ -60,9 +60,11 @@
 
 **NOTE:** If you have already cloned, run `git pull` to fetch the latest updates.
 
-## Don't Forget to share screenshots!
+## Share screenshots and tag your inner circle!
 
-Don't forget to share screenshots. If you are feeling courageous, I dare you to share your DM stat leaderboard screenshots.
+Don't forget to share screenshots. 
+
+If you are feeling courageous, I dare you to share your DM stat leaderboard screenshots.
 
 ### Screenshotting tips
 
