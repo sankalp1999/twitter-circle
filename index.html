@@ -169,10 +169,22 @@
         background-color: #ecb679; /* Slightly darker shade for hover effect */
     }
 
+    .custom-tooltip {
+    display: none; /* Hide tooltip by default */
+    position: absolute;
+    background-color: white;
+    color: #CF2D01;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    z-index: 10;
+}
+
+
 </style>
 </head>
 <body>
-    
+    <div id="tooltip" class="custom-tooltip"></div>
     <button id="leaderboardButton">Leaderboard</button>
     <button id="dmStatsButton" class="navigation-button">DM stats</button>
     <img src="https://images.gamebanana.com/img/ico/sprays/627d932c150ba.png" alt="Description" id="cornerImage">    
@@ -278,7 +290,23 @@ function drawNodes(filteredData) {
                 .attr('x', d.x - currentRadius)
                 .attr('y', d.y - currentRadius)
                 .attr('width', currentRadius * 2)
-                .attr('height', currentRadius * 2);
+                .attr('height', currentRadius * 2)
+                .on('mouseover', function(event) {
+                // Show tooltip
+                d3.select('#tooltip')
+                    .style('display', 'block')
+                    .html(d.twitterUsername); // Use innerHTML or textContent if plain text
+                })
+                .on('mousemove', function(event) {
+                    // Position tooltip
+                    d3.select('#tooltip')
+                        .style('left', (event.pageX + 10) + 'px')
+                        .style('top', (event.pageY + 10) + 'px');
+                })
+                .on('mouseout', function() {
+                    // Hide tooltip
+                    d3.select('#tooltip').style('display', 'none');
+                });
 
             const div = foreignObject.append('xhtml:div')
                 .style('width', `${currentRadius * 2}px`)
