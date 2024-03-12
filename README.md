@@ -21,7 +21,7 @@
    **Clone the repository:**
 
    ```bash
-   git clone https://github.com/sankalp1999/twitter-circle.git --depth 1
+   git clone https://github.com/sankalp1999/twitter-circle.git
    ```
 
 2. **Copy your Twitter archive (extracted folder, not the zip file) into the project folder and rename the archive/zip file to `twitter-archive`.** You have to ensure the archive is on the root folder of the project.
