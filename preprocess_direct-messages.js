@@ -58,9 +58,9 @@ const processedConversations = dmData.map(conversation => {
 			createdAt: firstMessage.createdAt
 		},
 		lastMessage: {  
-			id: lastMessage.id,
-			text: lastMessage.text, 
-			createdAt: lastMessage.createdAt
+			id: lastMessage?.id,
+			text: lastMessage?.text,
+			createdAt: lastMessage?.createdAt
 		},
 		numMessages : messages.length
 	}
