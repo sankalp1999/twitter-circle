@@ -36,7 +36,7 @@ const getPokemonImageUrl = () => {
 // }
 
 const fetchAvatarFromSotwe = async (page, twitterUsername, id) => {
-	await page.goto(`https://sotwe.com/${twitterUsername}`, { waitUntil: 'domcontentloaded' })
+	await page.goto(`https://sotwe.com/${twitterUsername}`, { waitUntil: 'networkidle2' })
 	const title = await page.evaluate(() => document.querySelector('title')?.innerText)
 
 	if (title === 'Twitter Web Viewer & Trend Analyzer & Downloader | Sotwe') {
@@ -101,6 +101,40 @@ const fetchAvatarFromTwstalker = async (page, twitterUsername, id) => {
 	return { imageSrc, bannerSrc }
 }
 
+const fetchAvatarInstalkerOrg = async (page, twitterUsername, id) => {
+
+	await page.goto(`https://instalker.org/${twitterUsername}`, { waitUntil: 'domcontentloaded' }, {timeout: 5000})
+
+	// I don't want to retry so skip accounts do not exist using simple logic
+	const areAllCountsZero = await page.evaluate(() => {
+		const numbrElements = Array.from(document.querySelectorAll('.dscun-numbr'))
+		return numbrElements.every(element => parseInt(element.textContent.replace('K', '000')) === 0)
+			  })
+	
+
+	if(areAllCountsZero) {
+		console.log(`Account does not exist or deactivated: ${twitterUsername}`)
+		return {twitterUsername: twitterUsername, imageSrc: getPokemonImageUrl(), bannerSrc: null,  id: id}
+	}
+
+	await page.waitForSelector('img[src^="https://pbs.twimg.com/profile_images"]')
+
+	const imageSrc = await page.$eval('img[src^="https://pbs.twimg.com/profile_images"]', img => img.src)	
+
+	let bannerSrc = 'already_exists'
+	if (id.includes('notfound')) {
+		bannerSrc = await page.evaluate(() => {
+			const element = document.querySelector('.todo-thumb1.dash-bg-image1.dash-bg-overlay')
+			// Extract the URL part from the `background-image` CSS property
+			const style = window.getComputedStyle(element)
+			const bgImage = style.backgroundImage // e.g., url("http://example.com/image.jpg")
+			return bgImage.replace(/url\(["']?(.*?)["']?\)/, '$1') // Remove url("...") wrapper
+		  })
+	}
+
+	return { imageSrc, bannerSrc }
+}
+
 const getAvatar = async (id, twitterUsername, browser, weight, isReachablePrimary) => {
 	let attempts = 2
 	for (let i = 0; i < attempts; i++) {
@@ -109,8 +143,8 @@ const getAvatar = async (id, twitterUsername, browser, weight, isReachablePrimar
 		try {
 			let result
 			// sotwe keeps image for deactivated accounts too hence using it first
-			if (isReachablePrimary && i === 0) {
-				let { imageSrc, bannerSrc } = await fetchAvatarFromSotwe(page, twitterUsername, id)
+			if (isReachablePrimary) {
+				let { imageSrc, bannerSrc } = await fetchAvatarFromTwstalker(page, twitterUsername, id)
 				
 				if(!imageSrc) {
 					imageSrc = getPokemonImageUrl()
@@ -119,7 +153,7 @@ const getAvatar = async (id, twitterUsername, browser, weight, isReachablePrimar
 				result = {twitterUsername, imageSrc, bannerSrc, weight, id}
 
 			} else {
-				let { imageSrc, bannerSrc } = await fetchAvatarFromTwstalker(page, twitterUsername, id)
+				let { imageSrc, bannerSrc } = await fetchAvatarInstalkerOrg(page, twitterUsername, id)
 
 				if(!imageSrc) {
 					imageSrc = getPokemonImageUrl()
@@ -149,9 +183,9 @@ const chunkArray = (array, size) => {
 }
 
 const processChunk = async (chunk, browser) => {
-	const primaryWebsite = 'sotwe.com'
+	const primaryWebsite = 'twstalker.com'
 	const isReachablePrimary = await isReachable(primaryWebsite)
-	isReachablePrimary ? console.log('fetching from twstalker') : console.log('sotwe')
+	isReachablePrimary ? console.log('fetching from twstalker') : console.log('instalk')
 	return await Promise.all(chunk.map(([id, { twitterUsername, weight }]) => getAvatar(id, twitterUsername, browser, weight, isReachablePrimary)))
 }
 
