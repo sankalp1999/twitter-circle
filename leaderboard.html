@@ -7,59 +7,72 @@
     <link rel="icon" href="https://pbs.twimg.com/profile_images/1692481211888025600/lUJUEO_p_400x400.jpg" type="image/png">
     <style>
         body {
-            font-family:Helvetica, Helvetica, Helvetica;
+            /* font-family:Helvetica, Helvetica, Helvetica; */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
             padding: 10px;
             background-color: #f9e4bc;
             color: #CF2D01;
             text-align: center;
-            
         }
+
         h1 {
             text-align: center;
-            
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
         #leaderboard {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+        
         .user {
-        background-color: f9e4bc;
-        border: 1px solid #CF2D01; /* Specifies the border width, style, and color */
-        padding: 10px;
-        margin: 10px;
-        width: 35vw; /* Adjust width here */
-        display: flex;
-        align-items: center;
-        border-radius: 10px;
-        cursor: pointer; /* Makes the mouse cursor change to a pointer on hover */
-        transition: transform 0.2s; /* Smooth transformation on click */
+            background-color: f9e4bc;
+            border: 1px solid #CF2D01; /* Specifies the border width, style, and color */
+            padding: 10px;
+            margin: 15px;
+            width: 45vw; /* Adjust width here */
+            display: flex;
+            align-items: center;
+            border-radius: 10px;
+            cursor: pointer; /* Makes the mouse cursor change to a pointer on hover */
+            transition: transform 0.2s; /* Smooth transformation on click */
         }
 
         .user:hover {
             transform: scale(1.02); /* Slightly enlarges the card on hover */
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
         }
         .user:hover::after {
-        content: 'click on card to open profile on Twitter';
-        position: absolute;
-        bottom: -2em;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #ecb679; /* Soft Light Grey */
-        color: #a65336; /* Warm Deep Orange */
-        padding: 5px;
-        border-radius: 5px;
-        font-size: 0.8em;
-        white-space: nowrap;
-        border: 1px solid #d9a993; /* Soft Orange for the border */
+            content: 'Click to open profile on Twitter';
+            position: absolute;
+            bottom: -2.5em;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ecb679;
+            color: #a65336;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            white-space: nowrap;
+            border: 1px solid #d9a993;
         }
         .user img {
             border-radius: 50%;
-            margin-right: 10px;
+            margin-right: 20px;
+            width: 80px;
+            height: 80px;
         }
         .username {
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 1.2rem;
         }
         .weight {
             margin-left: auto;
@@ -69,7 +82,7 @@
         
         #backButton {
             position: absolute;
-            font-size: large;
+            font-size: 1.1rem;
             top: 2vh;
             right: 2vw;
             padding: 0.5vw 1vw;
@@ -126,8 +139,8 @@
                 userElement.className = 'user';
                 userElement.innerHTML = `
                     <img src="${user.imageSrc}" alt="${user.twitterUsername}" width="60" height="60">
-                    <div class="username">@${user.twitterUsername}</div>
-                    <div class="weight">${idx} - Score: ${user.weight.toFixed(2)}</div>
+                    <div class="username"> ${idx}. ${user.twitterUsername}</div>
+                    <div class="weight">Score: ${user.weight.toFixed(2)}</div>
                 `;
                 // Make the card clickable and redirect to the user's Twitter profile
                 userElement.onclick = function() {
