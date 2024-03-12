@@ -82,6 +82,12 @@ const recipientAggregates = dmData.reduce((acc, conversation) => {
 	const messages = conversation.dmConversation.messages
 	const [a, b] = conversation.dmConversation.conversationId.split('-')
 	const recipientId = a === accountId ? b : a
+
+	if (!recipientId) {
+		console.log("recipient aggregates, preprocess direct messages")
+		return acc // Continue to the next iteration without making changes
+	}
+	
 	const recipientUsername = idToUsername[recipientId]
 
 
