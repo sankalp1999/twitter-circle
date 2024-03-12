@@ -147,6 +147,7 @@ const getAvatar = async (id, twitterUsername, browser, weight, isReachablePrimar
 				let { imageSrc, bannerSrc } = await fetchAvatarFromTwstalker(page, twitterUsername, id)
 				
 				if(!imageSrc) {
+					console.log('null image possibily line 150', imageSrc)
 					imageSrc = getPokemonImageUrl()
 				}
 				
@@ -156,6 +157,7 @@ const getAvatar = async (id, twitterUsername, browser, weight, isReachablePrimar
 				let { imageSrc, bannerSrc } = await fetchAvatarInstalkerOrg(page, twitterUsername, id)
 
 				if(!imageSrc) {
+					console.log('null image possibily line 160', imageSrc)
 					imageSrc = getPokemonImageUrl()
 				}
 				result = {twitterUsername, imageSrc, bannerSrc, weight, id}
@@ -232,6 +234,7 @@ const filePath = 'sortedCombinedWeights.json';
 		
 
 		remainingEntries.forEach(([id, { twitterUsername, weight }]) => {
+			console.log("Line 237, remaining entries", id, twitterUsername, weight)
 			results.push({twitterUsername: twitterUsername, imageSrc: getPokemonImageUrl(), weight: weight, id: id})
 		})
 		
@@ -249,35 +252,36 @@ const filePath = 'sortedCombinedWeights.json';
 		}, {})
 
 		
+		// results.forEach((result) => {
 
-		
-		results.forEach((result) => {
-			if (result.id.includes('notfound')) {
-				const regexPattern = 'profile_banners\\/([^\\/]+)'
-				const regex = new RegExp(regexPattern)
-				const match = result.bannerSrc ? result.bannerSrc.match(regex) : null
+		// 	console.log('ENTERING PFP CORRECTION LINE 256')
 
-				if (match) {
-					result.id = match[1] 
+		// 	if (result.id.includes('notfound')) {
+		// 		const regexPattern = 'profile_banners\\/([^\\/]+)'
+		// 		const regex = new RegExp(regexPattern)
+		// 		const match = result.bannerSrc ? result.bannerSrc.match(regex) : null
+		// 		console.log('not found if block LINE 264', match)
+		// 		if (match) {
+		// 			result.id = match[1] 
 
-					updatedScreenNameToId[result.twitterUsername] = { id: result.id, imageSrc: result.imageSrc } // Map username to ID
-           			updatedIdToScreenName[result.id] = { twitterUsername: result.twitterUsername, imageSrc: result.imageSrc }
-					console.log(result.id, result.twitterUsername)
+		// 			updatedScreenNameToId[result.twitterUsername] = { id: result.id, imageSrc: result.imageSrc } // Map username to ID
+        //    			updatedIdToScreenName[result.id] = { twitterUsername: result.twitterUsername, imageSrc: result.imageSrc }
+		// 			console.log(result.id, result.twitterUsername)
 
-					// since earlier we added only mentionsCountWeighted count for this
-					// lookup the new weight and add it to result.weight if the id is found in sortedDmWeightsLookup
-					const additionalWeight = sortedDmWeightsLookup[result.id]
-					if (additionalWeight) {
-						result.weight += additionalWeight
-					}
-				} else {
-					// If not fetching banner, then we don't have their username too
+		// 			// since earlier we added only mentionsCountWeighted count for this
+		// 			// lookup the new weight and add it to result.weight if the id is found in sortedDmWeightsLookup
+		// 			const additionalWeight = sortedDmWeightsLookup[result.id]
+		// 			if (additionalWeight) {
+		// 				result.weight += additionalWeight
+		// 			}
+		// 		} else {
+		// 			// If not fetching banner, then we don't have their username too
 
-					// console.log(`${result.twitterUsername} No ID found in bannerSrc`)
-					// Handle the case where no match is found, if necessary
-				}
-			}
-		})
+		// 			// console.log(`${result.twitterUsername} No ID found in bannerSrc`)
+		// 			// Handle the case where no match is found, if necessary
+		// 		}
+		// 	}
+		// })
 
 		fs.writeFileSync('user_mentions_screen_name_mapping.json', JSON.stringify({screenNameToId: updatedScreenNameToId, idToScreenName: updatedIdToScreenName}, null, 2), 'utf8', (err) => {
 			if (err) {
