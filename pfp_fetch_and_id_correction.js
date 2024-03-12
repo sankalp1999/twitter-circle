@@ -206,7 +206,7 @@ const filePath = 'sortedCombinedWeights.json';
   
 		for (const chunk of chunks) {
 			console.log(`Processing a chunk of ${chunk.length} entries...`)
-			const browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox', '--disable-setuid-sandbox'] })
+			const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] })
 			const chunkResults = await processChunk(chunk, browser)
 			results = results.concat(chunkResults)
 			await browser.close()
