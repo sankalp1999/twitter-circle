@@ -41,6 +41,10 @@ const processedConversations = dmData.map(conversation => {
 	const recipientId = a === accountId ? b : a
 	// console.log(recipientId, idToUsername[recipientId])
 	const messages = conversation.dmConversation.messages
+
+	if (messages.length === 0) return null
+
+
 	const firstMessage = messages[0].messageCreate
 	const lastMessage = messages[messages.length - 1].messageCreate
 
@@ -53,19 +57,18 @@ const processedConversations = dmData.map(conversation => {
 		recipientId: recipientId,
 		recipientUsername: idToUsername[recipientId],
 		firstMessage: {
-			id: firstMessage.id,
-			text: firstMessage.text,
-			createdAt: firstMessage.createdAt
+			id: firstMessage?.id,
+			text: firstMessage?.text,
+			createdAt: firstMessage?.createdAt
 		},
 		lastMessage: {  
-			id: lastMessage.id,
-			text: lastMessage.text, 
-			createdAt: lastMessage.createdAt
+			id: lastMessage?.id,
+			text: lastMessage?.text, 
+			createdAt: lastMessage?.createdAt
 		},
 		numMessages : messages.length
 	}
-})
-
+}).filter(item => item !== null)
 
 
 // IMPORTANT
