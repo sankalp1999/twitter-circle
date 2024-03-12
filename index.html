@@ -26,6 +26,8 @@
     transform-box: fill-box; /* Refer to the object's bounding box for the origin */
     border-radius: 50%; /* Keeps the circular shape */
     overflow: hidden; /* Ensures the content does not spill out on scale */
+
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .node-foreign-object:hover {
@@ -42,12 +44,13 @@
 
     label {
         margin-bottom: 20px; /* Space between the label and the slider */
-        font-size: 25px; /* Larger font size for readability */
+        font-size: 1.5rem; /* Larger font size for readability */
     }
 
     #slider-container {
-    margin-top: 10px;
-    text-align: center; /* Center-align the slider text and slider */
+        font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif ;
+        margin-top: 10px;
+        text-align: center; /* Center-align the slider text and slider */
     }
 
     svg {
@@ -63,24 +66,34 @@
     }
  
 
-
     #pfpCountSlider {
-        width: 25vw; /* Larger width for the slider */
-        -webkit-appearance: none; /* Override default appearance for WebKit browsers */
-        appearance: none;
-        height: 2vh; /* Increase the height for a bigger touch area */
-        background: #ffc0cb; /* Background color of the slider */
-        outline: none; /* Remove the outline to avoid a boxy look when selected */
-        opacity: 0.7; /* Slightly transparent */
-        transition: opacity 0.2s; /* Smooth transition for hover effect */
+    -webkit-appearance: none;
+    width: 25vw;
+    height: 15px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
     }
-    #pfpCountSlider::-webkit-slider-thumb,
-    #pfpCountSlider::-moz-range-thumb {
+
+    #pfpCountSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
     width: 25px;
     height: 25px;
-    background: hsl(196, 84%, 46%); /* Harmonize the color for consistency */
-    cursor: pointer;
     border-radius: 50%;
+    background: #CF2D01;
+    cursor: pointer;
+    }
+
+#pfpCountSlider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #CF2D01;
+    cursor: pointer;
     }
 
     @media (max-width: 768px) { /* Adjustments for tablets and mobile phones */
@@ -122,7 +135,7 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.2s ease-in-out;
-        font-size: 1.5vw; /* Optionally make the font size responsive */
+        font-size: 1.5rem; /* Optionally make the font size responsive */
     }
 
 
@@ -142,7 +155,7 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.2s ease-in-out;
-        font-size: 1.5vw; /* Optionally make the font size responsive */
+        font-size: 1.5rem; /* Optionally make the font size responsive */
     }
 
 
