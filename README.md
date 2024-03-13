@@ -18,6 +18,7 @@
 1. [Twitter Circle](#twitter-circle)
    - [Features](#features)
    - [Setup](#setup)
+   - [Troubleshooting](#troubleshooting)
 2. [Share screenshots and tag your inner circle!](#share-screenshots-and-tag-your-inner-circle)
 3. [How Twitter Circle Works](#how-twitter-circle-works)
    - [Tech stack](#tech-stack)
@@ -76,11 +77,32 @@
    npm start
    ```
 
-   This command will start the Twitter Circle application. Share screenshots of your top 100 now! If you liked it, please star the repo.
+   This command will start the Twitter Circle application. **Share screenshots of your top 100 now! If you liked it, please star the repo.**
 
- **Customer support:** Early access users contact me [https://twitter.com/dejavucoder](https://twitter.com/dejavucoder)
 
-**Use Chrome or Safari, Edge currently has CORS issue.** 
+   
+
+### **Troubleshooting :**
+
+**Customer support:** raise an issue or contact me [https://twitter.com/dejavucoder](https://twitter.com/dejavucoder) 
+
+1. Profile pictures not rendering -> Browser dependencies are missing - check https://pptr.dev/troubleshooting
+
+   For Linux, WSL etc. check [here](https://pptr.dev/troubleshooting#running-puppeteer-on-wsl-windows-subsystem-for-linux).
+
+   Error may look like below (it's from WSL)
+
+   ``` 
+   UnhandledPromiseRejectionWarning: Error: Failed to launch the browser process!
+
+   /your_username/.cache/puppeteer/chrome-linux-122.0.6261.69/chrome-linux/chrome: error while loading shared libraries: libatk-1.0.so.0: cannot open shared object file: No such file or directory
+
+
+   TROUBLESHOOTING: https://pptr.dev/troubleshooting 
+   ```
+
+   
+2. **Chrome or Safari** are recommended. Edge has CORS issue.
 
 ## Share screenshots and tag your inner circle!
 
@@ -92,6 +114,7 @@ Tag your inner circle in reply
 for better screenshot.
 
 If you are feeling courageous, I dare you to share your DM stats leaderboard screenshots.
+
 
 ## How Twitter Circle Works
 
