@@ -84,7 +84,7 @@ const recipientAggregates = dmData.reduce((acc, conversation) => {
 	const recipientId = a === accountId ? b : a
 
 	if (!recipientId) {
-		console.log("recipient aggregates, preprocess direct messages")
+		console.log('recipient aggregates, preprocess direct messages')
 		return acc // Continue to the next iteration without making changes
 	}
 	
@@ -200,7 +200,11 @@ Object.entries(mentionsData).forEach(([username, {count, id}]) => {
 })
 
 
-const reSortedArray = Object.entries(recipientWeights).sort((a, b) => b[1].weight - a[1].weight)
+const reSortedArray = Object.entries(recipientWeights).sort((a, b) => {
+	const weightA = a[1].weight ?? 0
+	const weightB = b[1].weight ?? 0
+	return weightB - weightA
+})
 
 const reSortedJson = JSON.stringify(reSortedArray, null, 2)
 fs.writeFileSync('sortedCombinedWeights.json', reSortedJson, 'utf8')
