@@ -72,7 +72,11 @@ const processedConversations = dmData.map(conversation => {
 
 
 // IMPORTANT
-const sortedConversations = processedConversations.sort((a, b) => b.numMessages - a.numMessages)
+const sortedConversations = processedConversations.sort((a, b) => {
+	const numMessagesA = a.numMessages ?? 0
+	const numMessagesB = b.numMessages ?? 0
+	return numMessagesB - numMessagesA
+})
 
 console.log(sortedConversations)
 
@@ -137,7 +141,11 @@ const recipientAggregates = dmData.reduce((acc, conversation) => {
 const sortedRecipientAggregates = Object.entries(recipientAggregates).map(([recipientId, stats]) => ({
 	recipientId,
 	...stats
-})).sort((a, b) => b.totalMessages - a.totalMessages) // Sort by totalMessages, adjust as needed
+})).sort((a, b) => {
+	const totalMessagesA = a.totalMessages ?? 0
+	const totalMessagesB = b.totalMessages ?? 0
+	return totalMessagesB - totalMessagesA
+})// Sort by totalMessages, adjust as needed
 
 console.log(sortedRecipientAggregates)
 
@@ -172,7 +180,11 @@ sortedConversations.forEach(convo => {
 	}
 })
 
-const sortedArray = Object.entries(recipientWeights).sort((a, b) => b[1].weight - a[1].weight)
+const sortedArray = Object.entries(recipientWeights).sort((a, b) => {
+	const weightA = a[1].weight ?? 0
+	const weightB = b[1].weight ?? 0
+	return weightB - weightA
+})
 console.log(sortedArray.length)
 // Save the updated profileData back to the file
 const recipientWeightsJson = JSON.stringify(sortedArray, null, 2)
