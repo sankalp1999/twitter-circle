@@ -292,7 +292,11 @@ const filePath = 'sortedCombinedWeights.json';
 		  })
 
 		
-		results.sort((a, b) => b.weight - a.weight)
+		  results.sort((a, b) => {
+			const weightA = a.weight ?? 0;
+			const weightB = b.weight ?? 0;
+			return weightB - weightA;
+		  });
 
 		const resultsJson = JSON.stringify(results, null, 2)
 		fs.writeFileSync('final_weights_with_pics.json', resultsJson, 'utf8')
