@@ -13,9 +13,6 @@ git stash
 
 git pull
 
-echo "Popping the stash to reapply the changes"
-git stash pop
-
 echo "Installing npm dependencies in case user missed..."
 npm install
 
