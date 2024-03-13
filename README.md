@@ -54,17 +54,20 @@
 
    This command will start the Twitter Circle application. Share screenshots of your top 100 now!
 
-**Customer support:** Early access users contact me [https://twitter.com/dejavucoder](https://twitter.com/dejavucoder)
+ **Customer support:** Early access users contact me [https://twitter.com/dejavucoder](https://twitter.com/dejavucoder)
 
-**NOTE:** If you have already cloned, run `git pull` to fetch the latest updates.
+**Use Chrome or Safari, Edge currently has CORS issue.** 
 
 ## Share screenshots and tag your inner circle!
 
-**Share screenshots** of your top 50, 100, 200 whatever you feel like and let your mutuals know
-by tagging! **Zoom out** browser enough to let the images fit in and exclude slider
+**Don't forget to share screenshots** of your top 50, 100 whatever you feel like
+
+Tag your inner circle in reply
+
+**Zoom out** browser enough to let the images fit in and please exclude slider
 for better screenshot.
 
-If you are feeling courageous, I dare you to share your DM stat leaderboard screenshots.
+If you are feeling courageous, I dare you to share your DM stats leaderboard screenshots.
 
 ## Flow of execution (optional FYI)
 
