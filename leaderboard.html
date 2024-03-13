@@ -128,7 +128,12 @@
         function createLeaderboard(users) {
             const leaderboard = document.getElementById('leaderboard');
             // Sort users by weight in descending order
-            users.sort((a, b) => b.weight - a.weight);
+            users.sort((a, b) => {
+                const weightA = a.weight ?? 0;
+                const weightB = b.weight ?? 0;
+                return weightB - weightA;
+            });
+
             let idx = 0
             users.forEach(user => {
                 if (idx === 0){
