@@ -8,8 +8,7 @@ set -e
 
 # Run each JavaScript file in synchronous order
 
-echo "You have uncommited changes, stashing the changes to proceed with the pull"
-git stash
+
 
 git pull
 
