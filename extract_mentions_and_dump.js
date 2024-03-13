@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-undef */
 const fs = require('fs').promises
 const path = require('path')
@@ -181,10 +182,18 @@ const processAndSaveMentions = async (data, userHandle, userId, aggregationFunct
 	let sortedMentionsArray
 	
 	if (aggregationFunction === aggregateMentionsWeighted) {
-		sortedMentionsArray = Object.entries(mentionsCount).sort((a, b) => b[1].count - a[1].count)
-	} else {
-		sortedMentionsArray = Object.entries(mentionsCount).sort((a, b) => b[1] - a[1])
-	}
+		sortedMentionsArray = Object.entries(mentionsCount).sort((a, b) => {
+		  const countA = a[1].count ?? 0
+		  const countB = b[1].count ?? 0
+		  return countB - countA
+		})
+	  } else {
+		sortedMentionsArray = Object.entries(mentionsCount).sort((a, b) => {
+		  const valueA = a[1] ?? 0
+		  const valueB = b[1] ?? 0
+		  return valueB - valueA
+		})
+	  }
 	// to put in the center
 	sortedMentionsArray.unshift([userHandle, { count: 1000, id: userId }])
     
