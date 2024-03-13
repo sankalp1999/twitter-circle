@@ -80,8 +80,6 @@ If you have already cloned, please do a `git pull`
    npm start
    ```
 
-   somtimes a hard reload `Ctrl + Shift + R` is required to load images properly
-
    This command will start the Twitter Circle application. **Share screenshots of your top 100 now! If you liked it, please star the repo.**
 
 
