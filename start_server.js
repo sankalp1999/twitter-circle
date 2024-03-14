@@ -4,13 +4,11 @@ const port = 8080
 const server = httpServer.createServer({
 	// Server options
 	cache: -1, // Disable caching for all files
-	setHeaders: (res, filePath) => {
-		if (filePath.endsWith('.jpg') || filePath.endsWith('.png') || filePath.endsWith('.gif')) {
-			// Disable caching for image files
-			res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
-			res.setHeader('Pragma', 'no-cache')
-			res.setHeader('Expires', '0')
-		}
+	setHeaders: (res) => {
+		// Disable caching for all files
+		res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+		res.setHeader('Pragma', 'no-cache')
+		res.setHeader('Expires', '0')
 	},
 })
 
