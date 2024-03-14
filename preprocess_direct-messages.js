@@ -42,7 +42,7 @@ const processedConversations = dmData.map(conversation => {
 	// console.log(recipientId, idToUsername[recipientId])
 	const messages = conversation.dmConversation.messages
 
-	if (messages.length === 0) return null
+	if (messages && messages.length === 0) return null
 
 
 	const firstMessage = messages[0].messageCreate
@@ -141,11 +141,13 @@ const recipientAggregates = dmData.reduce((acc, conversation) => {
 const sortedRecipientAggregates = Object.entries(recipientAggregates).map(([recipientId, stats]) => ({
 	recipientId,
 	...stats
-})).sort((a, b) => {
-	const totalMessagesA = a.totalMessages ?? 0
-	const totalMessagesB = b.totalMessages ?? 0
-	return totalMessagesB - totalMessagesA
-})// Sort by totalMessages, adjust as needed
+})).filter(item => item.totalMessages !== null && item.totalMessages !== undefined && !isNaN(item.totalMessages))
+.sort((a, b) => {
+  // At this point, totalMessages is guaranteed not to be null, undefined, or NaN.
+  const totalMessagesA = a.totalMessages ?? 0;
+  const totalMessagesB = b.totalMessages ?? 0;
+  return totalMessagesB - totalMessagesA;
+});
 
 console.log(sortedRecipientAggregates)
 
@@ -180,11 +182,12 @@ sortedConversations.forEach(convo => {
 	}
 })
 
-const sortedArray = Object.entries(recipientWeights).sort((a, b) => {
-	const weightA = a[1].weight ?? 0
-	const weightB = b[1].weight ?? 0
-	return weightB - weightA
-})
+const sortedArray = Object.entries(recipientWeights)
+	.filter(([, value]) => value.weight !== null && value.weight !== undefined && !isNaN(value.weight))
+	.sort((a, b) => {
+		return b[1].weight - a[1].weight
+	})
+
 console.log(sortedArray.length)
 // Save the updated profileData back to the file
 const recipientWeightsJson = JSON.stringify(sortedArray, null, 2)
@@ -212,11 +215,12 @@ Object.entries(mentionsData).forEach(([username, {count, id}]) => {
 })
 
 
-const reSortedArray = Object.entries(recipientWeights).sort((a, b) => {
-	const weightA = a[1].weight ?? 0
-	const weightB = b[1].weight ?? 0
-	return weightB - weightA
-})
+const reSortedArray = Object.entries(recipientWeights)
+	.filter(([, value]) => value.weight != null && !isNaN(value.weight))
+	.sort((a, b) => {
+		return b[1].weight - a[1].weight 
+	})
+
 
 const reSortedJson = JSON.stringify(reSortedArray, null, 2)
 fs.writeFileSync('sortedCombinedWeights.json', reSortedJson, 'utf8')
