@@ -32,8 +32,6 @@ const dmData = JSON.parse(fs.readFileSync('twitter-archive/data/direct-messages.
 
 const noMapping = []
 
-
-
 // dm side, only id data
 // no username
 const processedConversations = dmData.map(conversation => {
@@ -72,11 +70,10 @@ const processedConversations = dmData.map(conversation => {
 
 
 // IMPORTANT
-const sortedConversations = processedConversations.sort((a, b) => {
-	const numMessagesA = a.numMessages ?? 0
-	const numMessagesB = b.numMessages ?? 0
-	return numMessagesB - numMessagesA
-})
+const sortedConversations = processedConversations
+	.filter(({ numMessages }) => numMessages != null && !isNaN(numMessages))
+	.sort((a, b) => b.numMessages - a.numMessages)
+
 
 console.log(sortedConversations)
 
@@ -142,12 +139,7 @@ const sortedRecipientAggregates = Object.entries(recipientAggregates).map(([reci
 	recipientId,
 	...stats
 })).filter(item => item.totalMessages !== null && item.totalMessages !== undefined && !isNaN(item.totalMessages))
-.sort((a, b) => {
-  // At this point, totalMessages is guaranteed not to be null, undefined, or NaN.
-  const totalMessagesA = a.totalMessages ?? 0;
-  const totalMessagesB = b.totalMessages ?? 0;
-  return totalMessagesB - totalMessagesA;
-});
+	.sort((a, b) => b.totalMessages - a.totalMessages)
 
 console.log(sortedRecipientAggregates)
 
