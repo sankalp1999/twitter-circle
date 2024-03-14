@@ -68,11 +68,13 @@ If you have already cloned, please do a `git pull`
 
    This command will install all the necessary packages listed in the `package.json` file.
 
-5. **Set up the project (Linux and macOS)**
+5. **Set up the project**
 
    ```bash
    ./setup.sh
    ```
+
+   For **Windows**, you will require git bash or WSL to run above bash script.
 
 6. **Start the application**
 
@@ -87,7 +89,12 @@ If you have already cloned, please do a `git pull`
 
 ### **Troubleshooting :**
 
-**Customer support:** raise an issue or contact me [https://twitter.com/dejavucoder](https://twitter.com/dejavucoder) 
+ First step if not working, do a `git pull` and just re-run the script `./setup.sh`
+
+ If still not working, raise an issue or contact me [https://twitter.com/dejavucoder](https://twitter.com/dejavucoder) 
+
+
+#### Some other known issues
 
 1. Profile pictures not rendering -> Browser dependencies are missing - check https://pptr.dev/troubleshooting
 
