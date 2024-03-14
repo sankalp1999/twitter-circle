@@ -182,17 +182,14 @@ const processAndSaveMentions = async (data, userHandle, userId, aggregationFunct
 	let sortedMentionsArray
 	
 	if (aggregationFunction === aggregateMentionsWeighted) {
-		sortedMentionsArray = Object.entries(mentionsCount).sort((a, b) => {
-		  const countA = a[1].count ?? 0
-		  const countB = b[1].count ?? 0
-		  return countB - countA
-		})
+		sortedMentionsArray = Object.entries(mentionsCount)
+			.filter(([, value]) => value.count != null && !isNaN(value.count))
+			.sort((a, b) => b[1].count - a[1].count)
+
 	  } else {
-		sortedMentionsArray = Object.entries(mentionsCount).sort((a, b) => {
-		  const valueA = a[1] ?? 0
-		  const valueB = b[1] ?? 0
-		  return valueB - valueA
-		})
+		sortedMentionsArray = Object.entries(mentionsCount)
+			.filter(([, value]) => value != null && !isNaN(value))
+			.sort((a, b) => b[1] - a[1])
 	  }
 	// to put in the center
 	sortedMentionsArray.unshift([userHandle, { count: 1000, id: userId }])
