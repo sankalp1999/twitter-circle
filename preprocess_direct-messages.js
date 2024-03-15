@@ -85,11 +85,11 @@ const recipientAggregates = dmData.reduce((acc, conversation) => {
 	const recipientId = a === accountId ? b : a
 
 	if (!recipientId) {
-		console.log('recipient aggregates, preprocess direct messages')
+		console.log('Missing recipientId')
 		return acc // Continue to the next iteration without making changes
 	}
 	
-	const recipientUsername = idToUsername[recipientId]
+	const recipientUsername = idToUsername[recipientId] || `Unknown User ${recipientId}`
 
 
 	if (!acc[recipientId]) {
@@ -118,9 +118,18 @@ const recipientAggregates = dmData.reduce((acc, conversation) => {
 
 	// Determine the last message for this recipient
 	const lastMessageInConversation = messages.reduce((latest, current) => {
+		if (!current || !current.messageCreate) {
+			console.log('skipping message due to current being null/undefined or missing messageCreate')
+			return latest // Skip if no messageCreate property
+		}
 		const currentCreatedAt = new Date(current.messageCreate?.createdAt)
+
+		if (isNaN(currentCreatedAt.getTime())) {
+			return latest // Skip if createdAt is not a valid date
+		}
+
 		if (!latest || currentCreatedAt > new Date(latest.createdAt)) {
-			return { text: current.messageCreate.text, createdAt: current.messageCreate.createdAt }
+			return { text: current.messageCreate.text || '', createdAt: current.messageCreate.createdAt }
 		}
 		return latest
 	}, acc[recipientId].lastMessage)
