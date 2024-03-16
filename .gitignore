@@ -1,9 +1,11 @@
 node_modules
 .DS_STORE
 mentions_count_folder
-twitter-archive
+/twitter-archive/*
+
 .*
 *.json
 !package.json
 !package-lock.json
 bun.lockb
+!/twitter-archive/.keep
