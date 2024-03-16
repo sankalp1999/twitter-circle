@@ -49,13 +49,16 @@ const extractTwitterData = (tweet_data) => tweet_data.map(data => {
   
 	if (tweet.entities?.urls) {
 		validUrls = tweet.entities.urls.filter(url => 
-			url.expanded_url.match(/^https:\/\/twitter\.com\/\w+\/status\/\d+/)
+			url.expanded_url?.match(/^https:\/\/twitter\.com\/\w+\/status\/\d+/)
 		).map(url => ({
 			expanded_url: url.expanded_url,
 			screen_name: url.expanded_url.split('/')[3]
 		}))
 	}
-	console.log(validUrls)
+
+	if(validUrls.length > 0) {
+		console.log(validUrls)
+	}
   
 	return { timestamp, url_id, userMentions, validUrls }
 })
