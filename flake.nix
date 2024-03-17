@@ -10,21 +10,16 @@
         utils.lib.eachDefaultSystem (system:
             let 
                 pkgs = import nixpkgs { inherit system; };
-            in 
+            in with pkgs;
             {
-                packages = {
-                    default = pkgs.stdenv.mkDerivation {
-                        name = "twt-circle";
-                        src = ./.;   
+                devShells = {
+                    default = mkShell {
                         buildInputs = [
-                            pkgs.git
-                            pkgs.nodejs_18
+                            nodejs
                         ];
 
-                        builder = ./setup.sh; 
-
-                        installPhase = ''
-                            echo $out
+                        shellHook = '' 
+                            npm install
                         '';
                     };
                 };
