@@ -117,6 +117,8 @@ If you have already cloned, please do a `git pull`
    
    Find your chromium path and please set it like below example
 
+   around line 211 in `pfp_fetch_and_id_correction.js`
+
    ```
    const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'], executablePath: 'usr/bin/chromium-browser' })
    ```
@@ -152,6 +154,44 @@ Tried to keep complexity and dependencies at minimum
 - `account.js` - Details of your account like accountId and userhandle/screenname 
 - `tweets.js` - All your tweets (normal tweet, replies, quote tweets) with data like reply mentions, quote tweet url, text, media url
 - `direct-messages.js` - All your personal messages, no group chat messages
+
+
+```mermaid
+graph TD
+A[Extract mentions and quote tweets] --> B[Create user ID to screen name mapping]
+A --> C[Calculate weighted scores based on frequency and recency]
+D[Read direct messaging data] --> E[Extract DM data and calculate basic stats]
+D --> F[Compute DM weights]
+F --> G[Combine DM weights with mention weights]
+G --> H[Take top N users]
+H --> I[Fetch profile picture CDN URLs for top N users]
+H --> J[Attempt to correct missing user IDs]
+J --> K[Update ID-to-username mapping]
+K --> L[Create interactive visualization of Twitter circle]
+K --> M[Display ranking of friends based on combined weights]
+D --> N[Process data to count messages per month for past 5 years]
+N --> O[Prepare data for visualizing DM history graph]
+O --> P[Display table of DM statistics per recipient]
+P --> Q[Display bar graph of monthly message counts for selected recipient]
+
+style A fill:#ff9980
+style B fill:#ff9980
+style C fill:#ff9980
+style D fill:#80b3ff
+style E fill:#80b3ff
+style F fill:#80b3ff
+style G fill:#b3d9ff
+style H fill:#cccccc
+style I fill:#cccccc
+style J fill:#cccccc
+style K fill:#e6e6e6
+style L fill:#b3ffb3
+style M fill:#b3ffb3
+style N fill:#ffff99
+style O fill:#ffff99
+style P fill:#ffcc99
+style Q fill:#ffcc99
+```
 
 
 ### Flow of execution
