@@ -96,7 +96,9 @@ If you have already cloned, please do a `git pull`
 
 #### Some other known issues
 
-1. Profile pictures not rendering -> Browser dependencies are missing - check https://pptr.dev/troubleshooting
+1. Profile pictures not rendering 
+
+   a. Browser dependencies are missing - check https://pptr.dev/troubleshooting
 
    For Linux, WSL etc. check [here](https://pptr.dev/troubleshooting#running-puppeteer-on-wsl-windows-subsystem-for-linux).
 
@@ -109,6 +111,14 @@ If you have already cloned, please do a `git pull`
 
 
    TROUBLESHOOTING: https://pptr.dev/troubleshooting 
+   ```
+
+   b. Browser launch process fail because chromium path not set (Linux, M1 Macs)
+   
+   Find your chromium path and please set it like below example
+
+   ```
+   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'], executablePath: 'usr/bin/chromium-browser' })
    ```
 
    
@@ -145,6 +155,38 @@ Tried to keep complexity and dependencies at minimum
 
 
 ### Flow of execution
+
+```mermaid
+graph TD
+    A(Read tweets.js) --> B(Extract mentions and quote tweets)
+    B --> C(Create user ID to screen name mapping)
+    B --> D(Calculate mentions weights)
+    D --> E(Save weights to mentionsCountWeighted.json)
+    F(Read direct-messages.js) --> G(Extract DM data)
+    G --> H(Calculate DM stats)
+    H --> I(Calculate DM weights)
+    I --> J(Combine DM weights with mentions weights)
+    J --> K(Save combined weights to sortedCombinedWeights.json)
+    K --> L(Read sortedCombinedWeights.json)
+    L --> M(Fetch top N users' profile pictures)
+    M --> N(Correct missing user IDs)
+    N --> O(Save updated data to final_weights_with_pics.json)
+    G --> P(Process DM data for visualization)
+    P --> Q(Save DM stats with chart data to dm_final_stats_with_chart.json)
+    O --> R(Load data in index.html for D3.js visualization)
+    O --> S(Load data in leaderboard.html for ranking display)
+    Q --> T(Load data in dm_stats.html for DM stats table)
+    T --> U(Click on a row to view DM history)
+    U --> V(Load specific recipient's data in chart_draw.html for DM history graph)
+
+    classDef script fill:#f9f,stroke:#333,stroke-width:4px;
+    classDef data fill:#ccf,stroke:#333,stroke-width:2px;
+    classDef webpage fill:#cfc,stroke:#333,stroke-width:2px;
+
+    class A,B,F,G script;
+    class C,D,E,H,I,J,K,N,O,P,Q data;
+    class R,S,T,U,V webpage;
+```
 
 1. `extract_mentions_and_dump.js`:
    - Reads `tweets.js` from the user's Twitter archive.
