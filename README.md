@@ -96,7 +96,10 @@ If you have already cloned, please do a `git pull`
 
 #### Some other known issues
 
-1. Profile pictures not rendering 
+1. The frontend tweet webviewer website may be down. you can check by twstalker.com/your_user_name. In this case, you can try
+later or try changing line 146 in `pfp_fetch_and_id_correction.js`. `if (isReachablePrimary)` to `if (false)`
+
+2. Profile pictures not rendering 
 
    a. Browser dependencies are missing - check https://pptr.dev/troubleshooting
 
