@@ -135,6 +135,32 @@ const fetchAvatarInstalkerOrg = async (page, twitterUsername, id) => {
 	return { imageSrc, bannerSrc }
 }
 
+const fetchAvatarFromMuskViewer = async (page, twitterUsername, id) => {
+
+	await page.goto(`https://muskviewer.com/${twitterUsername}`, { waitUntil: 'domcontentloaded' }, {timeout: 5000})
+
+	const hasInternalServerError = await page.evaluate(() => {
+		const h1Text = document.querySelector('h1')?.textContent || ''
+		return h1Text.includes('500 — Internal Server Error')
+	  })
+
+	if (hasInternalServerError) {
+		console.log(`Account does not exist : ${twitterUsername}`)
+		return {twitterUsername: twitterUsername, imageSrc: getPokemonImageUrl(), bannerSrc: null,  id: id}
+	}
+
+	// await page.waitForSelector('img[alt="Tweet media"]', {timeout: 5000})
+	const imageSrc = await page.evaluate(() => {
+		const metaElement = document.querySelector('meta[name="og:image"]');
+		return metaElement ? metaElement.getAttribute('content') : null;
+	  });
+	
+	let bannerSrc = 'already_exists'
+	
+	return { imageSrc, bannerSrc }
+}
+
+
 const getAvatar = async (id, twitterUsername, browser, weight, isReachablePrimary) => {
 	let attempts = 2
 	for (let i = 0; i < attempts; i++) {
@@ -144,7 +170,7 @@ const getAvatar = async (id, twitterUsername, browser, weight, isReachablePrimar
 			let result
 			// sotwe keeps image for deactivated accounts too hence using it first
 			if (isReachablePrimary) {
-				let { imageSrc, bannerSrc } = await fetchAvatarFromTwstalker(page, twitterUsername, id)
+				let { imageSrc, bannerSrc } = await fetchAvatarFromMuskViewer(page, twitterUsername, id)
 				
 				if(!imageSrc) {
 					console.log('null image possibily line 150', imageSrc)
@@ -203,7 +229,7 @@ const filePath = 'sortedCombinedWeights.json';
 		const entries = data.slice(0, topN) // Use directly, assuming your data structure
 		const remainingEntries = data.slice(topN)
 
-		const chunks = chunkArray(entries, 50)
+		const chunks = chunkArray(entries, 25)
 		let results = []
   
 		for (const chunk of chunks) {
@@ -265,7 +291,7 @@ const filePath = 'sortedCombinedWeights.json';
 		
 		  const filteredAndSortedResults = results
 		  .filter(({ weight }) => weight != null && !isNaN(weight))
-		  .sort((a, b) => b.weight - a.weight);
+		  .sort((a, b) => b.weight - a.weight)
 		
 
 		const resultsJson = JSON.stringify(filteredAndSortedResults, null, 2)
