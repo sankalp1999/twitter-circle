@@ -169,7 +169,7 @@ const getAvatar = async (id, twitterUsername, browser, weight, isReachablePrimar
 		try {
 			let result
 			// sotwe keeps image for deactivated accounts too hence using it first
-			if (isReachablePrimary) {
+			if (false) {
 				let { imageSrc, bannerSrc } = await fetchAvatarFromMuskViewer(page, twitterUsername, id)
 				
 				if(!imageSrc) {
