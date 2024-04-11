@@ -52,7 +52,7 @@ If you have already cloned, please do a `git pull`
    git clone https://github.com/sankalp1999/twitter-circle.git
    ```
 
-2. **Copy your Twitter archive (extracted folder, not the zip file) into the project folder and rename the extracted folder to `twitter-archive`.** You have to ensure the archive is on the root folder of the project.
+2. **Make a folder named `twitter-archive` in the project folder, copy your Twitter archive (extracted folder named data, not the zip file) and paste it in `twitter-archive`.** You have to ensure the archive is on the root folder of the project.
 
 3. **Install Node.js (for Linux and MacOS)**
 
