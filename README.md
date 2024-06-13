@@ -1,5 +1,8 @@
 # Twitter Circle
 
+Update 13th June -> The scraper is not working properly because the sites put security. Not sure
+when I will fix this.
+
 ![Twitter Circle](static/example2.png)
 
 ## A tool to visualize your Twitter network and direct messaging history
