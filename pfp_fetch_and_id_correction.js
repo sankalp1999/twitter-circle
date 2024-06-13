@@ -170,7 +170,7 @@ const getAvatar = async (id, twitterUsername, browser, weight, isReachablePrimar
 			let result
 			// sotwe keeps image for deactivated accounts too hence using it first
 			if (isReachablePrimary) {
-				let { imageSrc, bannerSrc } = await fetchAvatarFromTwstalker(page, twitterUsername, id)
+				let { imageSrc, bannerSrc } = await fetchAvatarFromMuskViewer(page, twitterUsername, id)
 				
 				if(!imageSrc) {
 					console.log('null image possibily line 150', imageSrc)
@@ -180,7 +180,7 @@ const getAvatar = async (id, twitterUsername, browser, weight, isReachablePrimar
 				result = {twitterUsername, imageSrc, bannerSrc, weight, id}
 
 			} else {
-				let { imageSrc, bannerSrc } = await fetchAvatarFromMuskViewer(page, twitterUsername, id)
+				let { imageSrc, bannerSrc } = await fetchAvatarFromTwstalker(page, twitterUsername, id)
 
 				if(!imageSrc) {
 					console.log('null image possibily line 160', imageSrc)
