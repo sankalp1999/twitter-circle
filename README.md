@@ -1,7 +1,7 @@
 # Twitter Circle
 
 Update 13th June -> The scraper is not working properly because the sites put security. Not sure
-when I will fix this.
+when I will fix this. This means your twitter circle profile pics will appear as pokemon.
 
 ![Twitter Circle](static/example2.png)
 
