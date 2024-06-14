@@ -180,13 +180,37 @@
     z-index: 10;
 }
 
+.node-username {
+    fill: #ff6f42;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    font-size: 10px;
+}
 
+#toggleUsernamesButton {
+    position: absolute;
+    top: 14vh;
+    right: 2vw;
+    padding: 0.5vw 1vw;
+    background-color: inherit;
+    color: #CF2D01;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    font-size: 1.5rem;
+}
+
+#toggleUsernamesButton:hover {
+    background-color: #ecb679;
+}
 </style>
 </head>
 <body>
     <div id="tooltip" class="custom-tooltip"></div>
     <button id="leaderboardButton">Leaderboard</button>
     <button id="dmStatsButton" class="navigation-button">DM stats</button>
+    <button id="toggleUsernamesButton">Toggle Usernames</button>
     <img src="https://images.gamebanana.com/img/ico/sprays/627d932c150ba.png" alt="Description" id="cornerImage">    
     
     <svg id="network" width="2000" height="3000"></svg>
@@ -202,6 +226,9 @@
     document.getElementById('dmStatsButton').addEventListener('click', function() {
         window.location.href = 'dm_stats.html';
     });
+
+   
+
     let center = { x: 0, y: 0 };
 
     function updateCenter() {
@@ -321,6 +348,14 @@ function drawNodes(filteredData) {
                 .style('height', '100%')
                 .attr('onerror', "this.src='https://assets.pokemon.com/assets/cms2/img/pokedex/full/054.png'")
                 .on('click', () => window.open(`https://twitter.com/${d.twitterUsername}`, '_blank'));
+
+            svg.append('text')
+            .attr('class', 'node-username')
+            .attr('x', d.x)
+            .attr('y', d.y + currentRadius + 15) // Position the text below the circle
+            .attr('text-anchor', 'middle')
+            .style('font-size', '12px')
+            .text(d.twitterUsername);
         });
     }
 
@@ -344,8 +379,17 @@ function drawNodes(filteredData) {
         const filteredData = data.slice(0, value);
         drawNodes(filteredData); // Assuming 'data' is accessible, or you need to manage its scope
     });
+
+    let usernamesVisible = true;
+
+    document.getElementById('toggleUsernamesButton').addEventListener('click', function() {
+        usernamesVisible = !usernamesVisible;
+        svg.selectAll('.node-username')
+            .style('display', usernamesVisible ? 'block' : 'none');
+    });
     
 });
+
 </script>
 </body>
 </html>
