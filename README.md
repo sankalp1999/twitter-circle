@@ -2,6 +2,7 @@
 
 
 
+
 ![Twitter Circle](static/example2.png)
 
 ## A tool to visualize your Twitter network and direct messaging history
@@ -96,7 +97,16 @@ If you have already cloned, please do a `git pull`
  If still not working, raise an issue or contact me [https://twitter.com/dejavucoder](https://twitter.com/dejavucoder) 
 
 
-#### Some other known issues
+#### Known Issues
+
+*Update 16th June*
+
+Most problems will happen at the scraping stage. I don't directly scrape profile pics from Twitter.
+I currently scrape from muskviewer.com. You should be able to scrape once properly. If you try
+a second scrape immediately, then you may get rate limited.
+
+Earlier I was using twstalker.com which now has cloudfare bot detection. If you could help me get 
+around this, I am open to a PR.
 
 1. The frontend tweet webviewer website may be down. you can check by twstalker.com/your_user_name. In this case, you can try
 later or try changing line 146 in `pfp_fetch_and_id_correction.js`. `if (isReachablePrimary)` to `if (false)`
