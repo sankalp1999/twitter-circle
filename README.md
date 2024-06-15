@@ -99,7 +99,7 @@ If you have already cloned, please do a `git pull`
 
 #### Known Issues
 
-*Update 16th June*
+**Update 16th June**
 
 Most problems will happen at the scraping stage. I don't directly scrape profile pics from Twitter.
 I currently scrape from muskviewer.com. You should be able to scrape once properly. If you try
